@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Menu, X, ArrowRight, Instagram, Linkedin, Mail, MapPin, Phone, ChevronDown, CheckCircle2, ChevronLeft, ChevronRight, Shield, FileText, Plus } from 'lucide-react';
-// Importação da biblioteca oficial do Formspree
-import { useForm, ValidationError } from '@formspree/react';
 
 const App = () => {
-  // HOOK DO FORMSPREE
-  const [state, handleSubmit] = useForm("xeelonnr");
+  // ---------------------------------------------------------
+  // CONFIGURAÇÃO DO EMAIL (FORMSPREE)
+  // Como estamos no navegador, usaremos o método FETCH padrão.
+  // Coloque seu código do Formspree aqui (ex: xeelonnr)
+  const FORMSPREE_ID = "xeelonnr"; 
+  // ---------------------------------------------------------
 
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -17,6 +19,7 @@ const App = () => {
   const [visibleCount, setVisibleCount] = useState(4); // Começa mostrando 4 projetos
   const PROJECTS_PER_PAGE = 4; // Quantos carrega por vez ao clicar no botão
 
+  const [formStatus, setFormStatus] = useState('idle'); // idle, submitting, success, error
   const [isPrivacyOpen, setIsPrivacyOpen] = useState(false);
   const [isTermsOpen, setIsTermsOpen] = useState(false);
 
@@ -215,6 +218,35 @@ const App = () => {
 
   const loadMore = () => {
     setVisibleCount(prev => prev + PROJECTS_PER_PAGE);
+  };
+
+  // LOGICA DE ENVIO PADRÃO (Funciona sem instalar libs externas na prévia)
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setFormStatus('submitting');
+    
+    const formData = new FormData(e.target);
+    const data = Object.fromEntries(formData.entries());
+
+    try {
+      const response = await fetch(`https://formspree.io/f/${FORMSPREE_ID}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify(data)
+      });
+
+      if (response.ok) {
+        setFormStatus('success');
+        e.target.reset(); 
+      } else {
+        setFormStatus('error');
+      }
+    } catch (error) {
+      setFormStatus('error');
+    }
   };
 
   const TextModal = ({ title, onClose, children, icon: Icon }) => (
@@ -571,7 +603,7 @@ const App = () => {
             <div className="bg-white/5 p-8 md:p-10 rounded-sm border border-white/10 backdrop-blur-sm">
               <h3 className="text-2xl font-light mb-8 border-b border-gray-700 pb-4">Briefing Inicial</h3>
               
-              {state.succeeded ? (
+              {formStatus === 'success' ? (
                 <div className="text-center py-12 animate-fade-in">
                   <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-green-500/20 text-green-400 mb-4">
                     <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
@@ -580,25 +612,31 @@ const App = () => {
                   <p className="text-gray-400">Nossa equipe analisará seu briefing e entrará em contato em até 24h.</p>
                   <button onClick={() => window.location.reload()} className="mt-6 text-sm underline text-gray-500 hover:text-white">Enviar outro projeto</button>
                 </div>
+              ) : formStatus === 'error' ? (
+                 <div className="text-center py-12 animate-fade-in">
+                   <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-red-500/20 text-red-400 mb-4">
+                     <X className="w-8 h-8"/>
+                   </div>
+                   <h4 className="text-xl font-bold mb-2">Erro no envio</h4>
+                   <p className="text-gray-400 mb-6">Verifique se o código do Formspree (ex: xeelonnr) está correto no código.</p>
+                   <button onClick={() => setFormStatus('idle')} className="text-sm underline text-gray-500 hover:text-white">Tentar novamente</button>
+                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-6">
                   <div className="grid md:grid-cols-2 gap-6">
                     <div className="space-y-2">
                       <label htmlFor="nome" className="text-xs uppercase tracking-wider text-gray-500">Nome Completo</label>
                       <input id="nome" required name="nome" type="text" className="w-full bg-transparent border-b border-gray-700 focus:border-white py-2 outline-none transition-colors" placeholder="Seu nome" />
-                      <ValidationError prefix="Nome" field="nome" errors={state.errors} className="text-red-400 text-xs mt-1" />
                     </div>
                     <div className="space-y-2">
                       <label htmlFor="telefone" className="text-xs uppercase tracking-wider text-gray-500">Telefone</label>
                       <input id="telefone" required name="telefone" type="tel" className="w-full bg-transparent border-b border-gray-700 focus:border-white py-2 outline-none transition-colors" placeholder="(00) 00000-0000" />
-                      <ValidationError prefix="Telefone" field="telefone" errors={state.errors} className="text-red-400 text-xs mt-1" />
                     </div>
                   </div>
 
                   <div className="space-y-2">
                     <label htmlFor="email" className="text-xs uppercase tracking-wider text-gray-500">Email Corporativo/Pessoal</label>
                     <input id="email" required name="email" type="email" className="w-full bg-transparent border-b border-gray-700 focus:border-white py-2 outline-none transition-colors" placeholder="seuemail@exemplo.com" />
-                    <ValidationError prefix="Email" field="email" errors={state.errors} className="text-red-400 text-xs mt-1" />
                   </div>
 
                   <div className="grid md:grid-cols-2 gap-6">
@@ -628,15 +666,14 @@ const App = () => {
                   <div className="space-y-2">
                     <label htmlFor="mensagem" className="text-xs uppercase tracking-wider text-gray-500">Sobre o Projeto</label>
                     <textarea id="mensagem" name="mensagem" rows="3" className="w-full bg-transparent border-b border-gray-700 focus:border-white py-2 outline-none transition-colors resize-none" placeholder="Conte brevemente sobre o local, metragem e suas expectativas..."></textarea>
-                    <ValidationError prefix="Mensagem" field="mensagem" errors={state.errors} className="text-red-400 text-xs mt-1" />
                   </div>
 
                   <button 
-                    disabled={state.submitting}
+                    disabled={formStatus === 'submitting'}
                     type="submit" 
                     className="w-full bg-white text-black font-bold uppercase tracking-widest py-4 hover:bg-gray-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed mt-4"
                   >
-                    {state.submitting ? 'Enviando...' : 'Enviar Briefing'}
+                    {formStatus === 'submitting' ? 'Enviando...' : 'Enviar Briefing'}
                   </button>
                 </form>
               )}
