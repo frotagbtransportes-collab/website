@@ -568,7 +568,7 @@ const App = () => {
                   <MapPin className="mt-1 text-gray-500" />
                   <div>
                     <h4 className="font-bold text-lg">Escritório Central</h4>
-                    <p className="text-gray-400">Av. Brigadeiro Faria Lima, 2000<br/>São Paulo, SP - Brasil</p>
+                    <p className="text-gray-400">Av José Paulino Nogueira, 2000<br/>Paulínia, SP - Brasil</p>
                   </div>
                 </div>
                 
@@ -584,7 +584,7 @@ const App = () => {
                   <Mail className="text-gray-500" />
                   <div>
                     <h4 className="font-bold text-lg">Email</h4>
-                    <p className="text-gray-400">contato@archlab.com.br</p>
+                    <p className="text-gray-400">contato@archlabstudio.com.br</p>
                   </div>
                 </div>
               </div>
