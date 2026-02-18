@@ -460,7 +460,7 @@ const App = () => {
                   <Mail className="text-gray-500" />
                   <div>
                     <h4 className="font-bold text-lg">Email</h4>
-                    <p className="text-gray-400">contato@archlab.com.br</p>
+                    <p className="text-gray-400">contato@archlabstudio.com.br</p>
                   </div>
                 </div>
               </div>
