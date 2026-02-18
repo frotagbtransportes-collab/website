@@ -1,13 +1,28 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, X, ArrowRight, Instagram, Linkedin, Mail, MapPin, Phone, ChevronDown, CheckCircle2, ChevronLeft, ChevronRight, Shield, FileText, Plus } from 'lucide-react';
+import { Menu, X, ArrowRight, Instagram, Mail, MapPin, Phone, ChevronDown, CheckCircle2, ChevronLeft, ChevronRight, Shield, FileText, Plus } from 'lucide-react';
+
+// Ícone do WhatsApp (SVG Personalizado)
+const WhatsAppIcon = ({ size = 24, className = "" }) => (
+  <svg 
+    xmlns="http://www.w3.org/2000/svg" 
+    width={size} 
+    height={size} 
+    viewBox="0 0 24 24" 
+    fill="none" 
+    stroke="currentColor" 
+    strokeWidth="2" 
+    strokeLinecap="round" 
+    strokeLinejoin="round" 
+    className={className}
+  >
+    <path d="M3 21l1.65-3.8a9 9 0 1 1 3.4 2.9L3 21" />
+    <path d="M9 10a.5.5 0 0 0 1 0V9a.5.5 0 0 0-1 0v1a5 5 0 0 0 5 5h1a.5.5 0 0 0 0-1h-1a.5.5 0 0 0 0 1" />
+  </svg>
+);
 
 const App = () => {
-  // ---------------------------------------------------------
   // CONFIGURAÇÃO DO EMAIL (FORMSPREE)
-  // Como estamos no navegador, usaremos o método FETCH padrão.
-  // Coloque seu código do Formspree aqui (ex: xeelonnr)
   const FORMSPREE_ID = "xeelonnr"; 
-  // ---------------------------------------------------------
 
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -16,106 +31,82 @@ const App = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0); 
   
   // ESTADOS PARA O PORTFÓLIO INFINITO
-  const [visibleCount, setVisibleCount] = useState(4); // Começa mostrando 4 projetos
-  const PROJECTS_PER_PAGE = 4; // Quantos carrega por vez ao clicar no botão
+  const [visibleCount, setVisibleCount] = useState(4); 
+  const PROJECTS_PER_PAGE = 4;
 
-  const [formStatus, setFormStatus] = useState('idle'); // idle, submitting, success, error
+  const [formStatus, setFormStatus] = useState('idle'); 
   const [isPrivacyOpen, setIsPrivacyOpen] = useState(false);
   const [isTermsOpen, setIsTermsOpen] = useState(false);
 
   // Definição das animações CSS
   const customStyles = `
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-    @keyframes fadeInSlide {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    @keyframes scaleUp {
-      from { opacity: 0; transform: scale(0.95); }
-      to { opacity: 1; transform: scale(1); }
-    }
-    
-    .animate-fade-in {
-      animation: fadeIn 0.4s ease-out forwards;
-    }
-    .animate-fade-in-slide {
-      animation: fadeInSlide 0.6s ease-out forwards;
-    }
-    .animate-scale-up {
-      animation: scaleUp 0.3s ease-out forwards;
-    }
-    
-    .filter-btn {
-      position: relative;
-    }
-    .filter-btn::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 0;
-      height: 2px;
-      background-color: black;
-      transition: width 0.3s ease;
-    }
-    .filter-btn.active::after {
-      width: 100%;
-    }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes fadeInSlide { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes scaleUp { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+    .animate-fade-in { animation: fadeIn 0.4s ease-out forwards; }
+    .animate-fade-in-slide { animation: fadeInSlide 0.6s ease-out forwards; }
+    .animate-scale-up { animation: scaleUp 0.3s ease-out forwards; }
+    .filter-btn { position: relative; }
+    .filter-btn::after { content: ''; position: absolute; bottom: 0; left: 0; width: 0; height: 2px; background-color: black; transition: width 0.3s ease; }
+    .filter-btn.active::after { width: 100%; }
   `;
 
-  // Handle scroll effect for navbar
+  // Monitora o scroll para mudar a cor do menu
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-    };
+    const handleScroll = () => { setIsScrolled(window.scrollY > 50); };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Bloquear scroll quando qualquer modal estiver aberto
+  // Bloqueio de Scroll Seguro (Correção do "Travamento")
   useEffect(() => {
     if (selectedProject || isPrivacyOpen || isTermsOpen) {
-      document.body.style.overflow = 'hidden';
+      document.body.style.overflow = 'hidden'; // Trava
       if (selectedProject) setCurrentImageIndex(0);
     } else {
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = 'auto'; // Destrava
     }
+    
+    // Limpeza de segurança: garante que destrava ao sair
+    return () => { document.body.style.overflow = 'auto'; };
   }, [selectedProject, isPrivacyOpen, isTermsOpen]);
 
   // Resetar contagem ao mudar categoria
-  useEffect(() => {
-    setVisibleCount(PROJECTS_PER_PAGE);
-  }, [activeCategory]);
+  useEffect(() => { setVisibleCount(PROJECTS_PER_PAGE); }, [activeCategory]);
 
+  // Função segura de navegação suave
   const scrollToSection = (e, id) => {
     e.preventDefault();
+    
+    // Garante que fecha tudo antes de navegar
+    setIsMobileMenuOpen(false);
+    setSelectedProject(null);
+    setIsPrivacyOpen(false);
+    setIsTermsOpen(false);
+    
     const element = document.getElementById(id);
     if (element) {
       const yOffset = -80; 
       const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
       window.scrollTo({top: y, behavior: 'smooth'});
     }
-    setIsMobileMenuOpen(false);
   };
 
   const nextImage = (e) => {
     e.stopPropagation();
-    if (selectedProject) {
+    if (selectedProject && selectedProject.gallery) {
       setCurrentImageIndex((prev) => (prev === selectedProject.gallery.length - 1 ? 0 : prev + 1));
     }
   };
 
   const prevImage = (e) => {
     e.stopPropagation();
-    if (selectedProject) {
+    if (selectedProject && selectedProject.gallery) {
       setCurrentImageIndex((prev) => (prev === 0 ? selectedProject.gallery.length - 1 : prev - 1));
     }
   };
 
-  // BANCO DE DADOS DE PROJETOS (EXPANDIDO)
+  // BANCO DE DADOS DE PROJETOS
   const projects = [
     {
       id: 1,
@@ -136,11 +127,7 @@ const App = () => {
       category: "comercial",
       location: "Faria Lima, SP",
       image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2070&auto=format&fit=crop",
-      gallery: [
-        "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2070&auto=format&fit=crop",
-        "https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=2069&auto=format&fit=crop",
-        "https://images.unsplash.com/photo-1497366811353-6870744d04b2?q=80&w=2069&auto=format&fit=crop"
-      ],
+      gallery: ["https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2070&auto=format&fit=crop"],
       desc: "Sede corporativa com certificação LEED Platinum. Fachada em pele de vidro de alta performance e espaços de convivência que estimulam a colaboração."
     },
     {
@@ -149,11 +136,7 @@ const App = () => {
       category: "residencial",
       location: "Nova York, EUA",
       image: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=2053&auto=format&fit=crop",
-      gallery: [
-        "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=2053&auto=format&fit=crop",
-        "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?q=80&w=1974&auto=format&fit=crop",
-        "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?q=80&w=2070&auto=format&fit=crop"
-      ],
+      gallery: ["https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=2053&auto=format&fit=crop"],
       desc: "Reforma completa de galpão histórico transformado em loft residencial, mantendo a estrutura original de tijolos aparentes e vigas metálicas."
     },
     {
@@ -162,53 +145,15 @@ const App = () => {
       category: "comercial",
       location: "Lisboa, PT",
       image: "https://images.unsplash.com/photo-1518112390430-f4ab02e9c2c8?q=80&w=2081&auto=format&fit=crop",
-      gallery: [
-        "https://images.unsplash.com/photo-1518112390430-f4ab02e9c2c8?q=80&w=2081&auto=format&fit=crop",
-        "https://images.unsplash.com/photo-1554907984-15263bfd63bd?q=80&w=2070&auto=format&fit=crop",
-        "https://images.unsplash.com/photo-1574958269340-fa927503f3dd?q=80&w=1948&auto=format&fit=crop"
-      ],
+      gallery: ["https://images.unsplash.com/photo-1518112390430-f4ab02e9c2c8?q=80&w=2081&auto=format&fit=crop"],
       desc: "Espaço de arte contemporânea e varejo de luxo. A iluminação zenital e os amplos vãos livres permitem a flexibilidade necessária para exposições."
     },
-    // NOVOS PROJETOS ADICIONADOS PARA TESTAR PAGINAÇÃO
-    {
-      id: 5,
-      title: "Casa da Montanha",
-      category: "residencial",
-      location: "Campos do Jordão, SP",
-      image: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=2070&auto=format&fit=crop",
-      gallery: ["https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=2070&auto=format&fit=crop"],
-      desc: "Refúgio de inverno com estrutura em madeira laminada colada e vidro."
-    },
-    {
-      id: 6,
-      title: "Edifício Aurora",
-      category: "comercial",
-      location: "Curitiba, PR",
-      image: "https://images.unsplash.com/photo-1454694220579-9d6672b12866?q=80&w=2070&auto=format&fit=crop",
-      gallery: ["https://images.unsplash.com/photo-1454694220579-9d6672b12866?q=80&w=2070&auto=format&fit=crop"],
-      desc: "Centro de inovação tecnológica com fachada responsiva."
-    },
-    {
-      id: 7,
-      title: "Vila Costeira",
-      category: "residencial",
-      location: "Trancoso, BA",
-      image: "https://images.unsplash.com/photo-1523217582562-09d0def993a6?q=80&w=2080&auto=format&fit=crop",
-      gallery: ["https://images.unsplash.com/photo-1523217582562-09d0def993a6?q=80&w=2080&auto=format&fit=crop"],
-      desc: "Residência de verão utilizando técnicas vernaculares locais."
-    },
-    {
-      id: 8,
-      title: "Shopping Open Mall",
-      category: "comercial",
-      location: "Campinas, SP",
-      image: "https://images.unsplash.com/photo-1519567241046-7f570eee3d9f?q=80&w=2070&auto=format&fit=crop",
-      gallery: ["https://images.unsplash.com/photo-1519567241046-7f570eee3d9f?q=80&w=2070&auto=format&fit=crop"],
-      desc: "Conceito de shopping aberto integrado com parque urbano."
-    }
+    { id: 5, title: "Casa da Montanha", category: "residencial", location: "Campos do Jordão, SP", image: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=2070&auto=format&fit=crop", gallery: ["https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=2070&auto=format&fit=crop"], desc: "Refúgio de inverno com estrutura em madeira laminada colada e vidro." },
+    { id: 6, title: "Edifício Aurora", category: "comercial", location: "Curitiba, PR", image: "https://images.unsplash.com/photo-1454694220579-9d6672b12866?q=80&w=2070&auto=format&fit=crop", gallery: ["https://images.unsplash.com/photo-1454694220579-9d6672b12866?q=80&w=2070&auto=format&fit=crop"], desc: "Centro de inovação tecnológica com fachada responsiva." },
+    { id: 7, title: "Vila Costeira", category: "residencial", location: "Trancoso, BA", image: "https://images.unsplash.com/photo-1523217582562-09d0def993a6?q=80&w=2080&auto=format&fit=crop", gallery: ["https://images.unsplash.com/photo-1523217582562-09d0def993a6?q=80&w=2080&auto=format&fit=crop"], desc: "Residência de verão utilizando técnicas vernaculares locais." },
+    { id: 8, title: "Shopping Open Mall", category: "comercial", location: "Campinas, SP", image: "https://images.unsplash.com/photo-1519567241046-7f570eee3d9f?q=80&w=2070&auto=format&fit=crop", gallery: ["https://images.unsplash.com/photo-1519567241046-7f570eee3d9f?q=80&w=2070&auto=format&fit=crop"], desc: "Conceito de shopping aberto integrado com parque urbano." }
   ];
 
-  // Lógica de Filtragem e Paginação
   const filteredProjects = activeCategory === 'todos' 
     ? projects 
     : projects.filter(p => p.category === activeCategory);
@@ -220,7 +165,6 @@ const App = () => {
     setVisibleCount(prev => prev + PROJECTS_PER_PAGE);
   };
 
-  // LOGICA DE ENVIO PADRÃO (Funciona sem instalar libs externas na prévia)
   const handleSubmit = async (e) => {
     e.preventDefault();
     setFormStatus('submitting');
@@ -231,33 +175,24 @@ const App = () => {
     try {
       const response = await fetch(`https://formspree.io/f/${FORMSPREE_ID}`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        },
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
         body: JSON.stringify(data)
       });
 
-      if (response.ok) {
-        setFormStatus('success');
-        e.target.reset(); 
-      } else {
-        setFormStatus('error');
-      }
-    } catch (error) {
-      setFormStatus('error');
-    }
+      if (response.ok) { setFormStatus('success'); e.target.reset(); } else { setFormStatus('error'); }
+    } catch (error) { setFormStatus('error'); }
   };
 
+  // Componente de Modal Genérico (com Z-Index aumentado para evitar bugs)
   const TextModal = ({ title, onClose, children, icon: Icon }) => (
-    <div className="fixed inset-0 z-[70] flex items-center justify-center p-4 bg-black/90 backdrop-blur-sm animate-fade-in" onClick={onClose}>
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/95 backdrop-blur-sm animate-fade-in" onClick={onClose}>
       <div className="bg-white w-full max-w-2xl h-auto max-h-[80vh] overflow-y-auto relative shadow-2xl rounded-sm p-8 md:p-12 animate-scale-up" onClick={e => e.stopPropagation()}>
-        <button onClick={onClose} className="absolute top-4 right-4 p-2 hover:bg-gray-100 rounded-full transition-colors">
+        <button onClick={onClose} className="absolute top-4 right-4 p-2 hover:bg-gray-100 rounded-full transition-colors text-black">
           <X size={24} />
         </button>
         <div className="flex items-center space-x-3 mb-8 border-b border-gray-100 pb-4">
           {Icon && <Icon size={28} className="text-black"/>}
-          <h2 className="text-2xl font-bold uppercase tracking-widest">{title}</h2>
+          <h2 className="text-2xl font-bold uppercase tracking-widest text-black">{title}</h2>
         </div>
         <div className="prose prose-sm max-w-none text-gray-600 leading-relaxed">
           {children}
@@ -290,10 +225,10 @@ const App = () => {
         </div>
 
         {isMobileMenuOpen && (
-          <div className="absolute top-full left-0 w-full bg-white shadow-lg py-8 px-6 flex flex-col space-y-6 md:hidden animate-fade-in-slide">
-            <a href="#portfolio" onClick={(e) => scrollToSection(e, 'portfolio')} className="text-lg font-medium">Projetos</a>
-            <a href="#about" onClick={(e) => scrollToSection(e, 'about')} className="text-lg font-medium">Sobre</a>
-            <a href="#services" onClick={(e) => scrollToSection(e, 'services')} className="text-lg font-medium">Serviços</a>
+          <div className="absolute top-full left-0 w-full bg-white shadow-lg py-8 px-6 flex flex-col space-y-6 md:hidden animate-fade-in-slide border-t border-gray-100">
+            <a href="#portfolio" onClick={(e) => scrollToSection(e, 'portfolio')} className="text-lg font-medium text-black">Projetos</a>
+            <a href="#about" onClick={(e) => scrollToSection(e, 'about')} className="text-lg font-medium text-black">Sobre</a>
+            <a href="#services" onClick={(e) => scrollToSection(e, 'services')} className="text-lg font-medium text-black">Serviços</a>
             <a href="#contact" onClick={(e) => scrollToSection(e, 'contact')} className="text-lg font-medium text-black">Iniciar Projeto</a>
           </div>
         )}
@@ -330,22 +265,22 @@ const App = () => {
         </div>
       </header>
 
-      {/* Intro / Philosophy */}
-      <section id="about" className="py-24 bg-white">
-        <div className="container mx-auto px-6 md:px-12 grid md:grid-cols-2 gap-16 items-center">
-          <div className="animate-fade-in-slide">
-            <h2 className="text-4xl md:text-5xl font-light mb-8 leading-tight text-gray-900">
-              Criamos espaços onde <br/><span className="font-bold italic">a vida acontece.</span>
-            </h2>
-            <div className="h-1 w-20 bg-black mb-8"></div>
-          </div>
-          <div className="space-y-6 text-gray-600 text-lg font-light leading-relaxed animate-fade-in-slide animate-delay-100">
-            <p>
-              O <span className="font-semibold text-black">ArchLab</span> é um estúdio de arquitetura contemporânea focado na intersecção entre funcionalidade, arte e sustentabilidade.
-            </p>
-            <p>
-              Acreditamos que cada projeto, seja uma residência íntima ou um complexo comercial, possui uma narrativa única. Como um escritório jovem e inovador, nossa missão é traduzir as necessidades e sonhos de nossos clientes em formas concretas com atenção meticulosa aos detalhes.
-            </p>
+      {/* Intro / Philosophy - TEXTO ATUALIZADO (Pertinência/Função) */}
+      <section id="about" className="py-32 bg-white">
+        <div className="container mx-auto px-6 md:px-12">
+          <div className="grid md:grid-cols-12 gap-12 items-start">
+            <div className="md:col-span-5 animate-fade-in-slide">
+              <span className="block text-xs font-bold tracking-[0.3em] text-gray-400 mb-6 uppercase">A Nossa Abordagem</span>
+              <h2 className="text-4xl md:text-6xl font-light leading-tight text-gray-900">
+                A estética <br/>da <span className="font-bold">necessidade</span> <br/>e da função.
+              </h2>
+              <div className="h-0.5 w-24 bg-black mt-8"></div>
+            </div>
+            <div className="md:col-span-7 md:pl-12 space-y-8 text-lg font-light leading-relaxed text-gray-600 animate-fade-in-slide animate-delay-100">
+              <p>No <span className="font-medium text-black">ArchLab</span>, não nos prendemos a rótulos ou estilos pré-definidos. A nossa assinatura é a pertinência. Acreditamos que a verdadeira arquitetura nasce da resposta exata ao que o projeto exige.</p>
+              <p>Unimos o funcional ao estético de forma inseparável. Se o espaço pede silêncio, desenhamos calma; se pede impacto, desenhamos ousadia. O nosso compromisso é <span className="italic text-gray-900">desenhar o necessário</span> com inteligência, criando espaços que servem, antes de tudo, à vida de quem os habita.</p>
+              <div className="pt-8"><p className="text-xs font-bold tracking-widest uppercase text-black">Arquitetura Sob Medida • Desde 2024</p></div>
+            </div>
           </div>
         </div>
       </section>
@@ -359,7 +294,6 @@ const App = () => {
               <h2 className="text-3xl md:text-4xl font-bold text-gray-900">Nossos Projetos</h2>
             </div>
             
-            {/* Filter Buttons */}
             <div className="flex space-x-6 mt-6 md:mt-0 overflow-x-auto pb-2 md:pb-0">
               {['todos', 'residencial', 'comercial'].map((cat) => (
                 <button
@@ -375,13 +309,12 @@ const App = () => {
             </div>
           </div>
 
-          {/* GRID DE PROJETOS */}
-          <div key={activeCategory} className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12 animate-fade-in">
             {visibleProjects.map((project, index) => (
               <div 
                 key={project.id} 
-                className="group cursor-pointer animate-fade-in-slide"
-                style={{ animationDelay: `${index * 100}ms` }} // Efeito cascata no load
+                className="group cursor-pointer"
+                style={{ animationDelay: `${index * 100}ms` }} 
                 onClick={() => setSelectedProject(project)}
               >
                 <div className="relative overflow-hidden aspect-[4/3] mb-6">
@@ -407,7 +340,6 @@ const App = () => {
             ))}
           </div>
 
-          {/* Botão Ver Mais */}
           {hasMoreProjects && (
             <div className="flex justify-center mt-16 animate-fade-in">
               <button 
@@ -422,9 +354,9 @@ const App = () => {
         </div>
       </section>
 
-      {/* Project Details Modal */}
+      {/* Project Details Modal - Z-Index 9999 para garantir visibilidade */}
       {selectedProject && (
-        <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 md:p-8 bg-black/90 backdrop-blur-sm animate-fade-in" onClick={() => setSelectedProject(null)}>
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 md:p-8 bg-black/95 backdrop-blur-sm animate-fade-in" onClick={() => setSelectedProject(null)}>
           <div className="bg-white w-full max-w-5xl h-full md:h-auto md:max-h-[90vh] overflow-y-auto relative shadow-2xl animate-scale-up" onClick={e => e.stopPropagation()}>
             <button 
               onClick={() => setSelectedProject(null)}
@@ -436,37 +368,24 @@ const App = () => {
             <div className="grid md:grid-cols-2 h-full">
                <div className="h-64 md:h-full min-h-[400px] relative bg-gray-100 group">
                  <img 
-                   src={selectedProject.gallery[currentImageIndex]} 
+                   src={selectedProject.gallery ? selectedProject.gallery[currentImageIndex] : selectedProject.image} 
                    alt={`${selectedProject.title} ${currentImageIndex + 1}`} 
                    className="absolute inset-0 w-full h-full object-cover transition-opacity duration-500 animate-fade-in" 
                    key={currentImageIndex} 
                  />
                  
-                 <button 
-                   onClick={prevImage}
-                   className="absolute left-4 top-1/2 -translate-y-1/2 p-2 bg-white/80 hover:bg-white text-black rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
-                 >
-                   <ChevronLeft size={24} />
-                 </button>
-                 
-                 <button 
-                   onClick={nextImage}
-                   className="absolute right-4 top-1/2 -translate-y-1/2 p-2 bg-white/80 hover:bg-white text-black rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
-                 >
-                   <ChevronRight size={24} />
-                 </button>
-
-                 <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex space-x-2">
-                   {selectedProject.gallery.map((_, idx) => (
-                     <div 
-                       key={idx}
-                       onClick={(e) => { e.stopPropagation(); setCurrentImageIndex(idx); }}
-                       className={`w-2 h-2 rounded-full cursor-pointer transition-all ${
-                         idx === currentImageIndex ? 'bg-white w-4' : 'bg-white/50 hover:bg-white/80'
-                       }`}
-                     />
-                   ))}
-                 </div>
+                 {/* Setas de navegação (Só mostra se tiver galeria com + de 1 foto) */}
+                 {selectedProject.gallery && selectedProject.gallery.length > 1 && (
+                   <>
+                     <button onClick={prevImage} className="absolute left-4 top-1/2 -translate-y-1/2 p-2 bg-white/80 hover:bg-white text-black rounded-full opacity-0 group-hover:opacity-100 transition-opacity"><ChevronLeft size={24} /></button>
+                     <button onClick={nextImage} className="absolute right-4 top-1/2 -translate-y-1/2 p-2 bg-white/80 hover:bg-white text-black rounded-full opacity-0 group-hover:opacity-100 transition-opacity"><ChevronRight size={24} /></button>
+                     <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex space-x-2">
+                       {selectedProject.gallery.map((_, idx) => (
+                         <div key={idx} onClick={(e) => { e.stopPropagation(); setCurrentImageIndex(idx); }} className={`w-2 h-2 rounded-full cursor-pointer transition-all ${idx === currentImageIndex ? 'bg-white w-4' : 'bg-white/50 hover:bg-white/80'}`}/>
+                       ))}
+                     </div>
+                   </>
+                 )}
                </div>
                
                <div className="p-8 md:p-12 flex flex-col justify-center bg-white">
@@ -474,24 +393,15 @@ const App = () => {
                    <div className="flex items-center justify-between mb-4">
                      <span className="text-xs font-bold tracking-widest uppercase text-black border border-black px-2 py-1">{selectedProject.category}</span>
                    </div>
-                   
                    <h3 className="text-3xl md:text-4xl font-bold mb-6 text-gray-900">{selectedProject.title}</h3>
-                   
                    <div className="flex items-center text-gray-500 mb-8 pb-8 border-b border-gray-100">
                      <MapPin size={18} className="mr-2" />
                      <span className="text-sm tracking-wide">{selectedProject.location}</span>
                    </div>
-
                    <h4 className="text-sm font-bold uppercase tracking-widest mb-3 text-gray-900">Conceito</h4>
-                   <p className="text-gray-600 leading-loose mb-8">
-                     {selectedProject.desc}
-                   </p>
+                   <p className="text-gray-600 leading-loose mb-8">{selectedProject.desc}</p>
                  </div>
-
-                 <button 
-                   onClick={(e) => { setSelectedProject(null); scrollToSection(e, 'contact'); }} 
-                   className="w-full bg-black text-white py-4 uppercase tracking-widest text-sm hover:bg-gray-800 transition-colors flex items-center justify-center space-x-2"
-                 >
+                 <button onClick={(e) => { setSelectedProject(null); scrollToSection(e, 'contact'); }} className="w-full bg-black text-white py-4 uppercase tracking-widest text-sm hover:bg-gray-800 transition-colors flex items-center justify-center space-x-2">
                    <span>Quero um projeto similar</span>
                    <ArrowRight size={16} />
                  </button>
@@ -504,46 +414,22 @@ const App = () => {
       {/* Services Section */}
       <section id="services" className="py-24 bg-white">
         <div className="container mx-auto px-6 md:px-12">
-          <div className="mb-16">
-            <h3 className="text-sm font-bold tracking-[0.2em] text-gray-400 mb-2 uppercase">Expertise</h3>
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900">O Que Fazemos</h2>
-          </div>
-
+          <div className="mb-16"><h3 className="text-sm font-bold tracking-[0.2em] text-gray-400 mb-2 uppercase">Expertise</h3><h2 className="text-3xl md:text-4xl font-bold text-gray-900">O Que Fazemos</h2></div>
           <div className="grid md:grid-cols-3 gap-8">
             <div className="bg-gray-50 p-8 group hover:bg-black hover:text-white transition-all duration-300">
               <h3 className="text-xl font-bold mb-4">Arquitetura Residencial</h3>
-              <p className="text-gray-600 group-hover:text-gray-300 mb-6 leading-relaxed">
-                Projetos de casas e reformas que priorizam o conforto, a estética e a personalidade dos moradores. Do conceito à entrega.
-              </p>
-              <ul className="space-y-2 text-sm text-gray-500 group-hover:text-gray-400">
-                <li className="flex items-center"><CheckCircle2 size={16} className="mr-2"/> Projetos Executivos</li>
-                <li className="flex items-center"><CheckCircle2 size={16} className="mr-2"/> Aprovação Legal</li>
-                <li className="flex items-center"><CheckCircle2 size={16} className="mr-2"/> Detalhamento</li>
-              </ul>
+              <p className="text-gray-600 group-hover:text-gray-300 mb-6 leading-relaxed">Projetos de casas e reformas que priorizam o conforto, a estética e a personalidade dos moradores. Do conceito à entrega.</p>
+              <ul className="space-y-2 text-sm text-gray-500 group-hover:text-gray-400"><li className="flex items-center"><CheckCircle2 size={16} className="mr-2"/> Projetos Executivos</li><li className="flex items-center"><CheckCircle2 size={16} className="mr-2"/> Aprovação Legal</li><li className="flex items-center"><CheckCircle2 size={16} className="mr-2"/> Detalhamento</li></ul>
             </div>
-
             <div className="bg-gray-50 p-8 group hover:bg-black hover:text-white transition-all duration-300">
               <h3 className="text-xl font-bold mb-4">Design de Interiores</h3>
-              <p className="text-gray-600 group-hover:text-gray-300 mb-6 leading-relaxed">
-                Transformação de ambientes internos com foco em ergonomia, iluminação e seleção curada de materiais e mobiliário.
-              </p>
-              <ul className="space-y-2 text-sm text-gray-500 group-hover:text-gray-400">
-                <li className="flex items-center"><CheckCircle2 size={16} className="mr-2"/> Layout e Fluxos</li>
-                <li className="flex items-center"><CheckCircle2 size={16} className="mr-2"/> Marcenaria Personalizada</li>
-                <li className="flex items-center"><CheckCircle2 size={16} className="mr-2"/> Produção e Decoração</li>
-              </ul>
+              <p className="text-gray-600 group-hover:text-gray-300 mb-6 leading-relaxed">Transformação de ambientes internos com foco em ergonomia, iluminação e seleção curada de materiais e mobiliário.</p>
+              <ul className="space-y-2 text-sm text-gray-500 group-hover:text-gray-400"><li className="flex items-center"><CheckCircle2 size={16} className="mr-2"/> Layout e Fluxos</li><li className="flex items-center"><CheckCircle2 size={16} className="mr-2"/> Marcenaria Personalizada</li><li className="flex items-center"><CheckCircle2 size={16} className="mr-2"/> Produção e Decoração</li></ul>
             </div>
-
             <div className="bg-gray-50 p-8 group hover:bg-black hover:text-white transition-all duration-300">
               <h3 className="text-xl font-bold mb-4">Gestão e Consultoria</h3>
-              <p className="text-gray-600 group-hover:text-gray-300 mb-6 leading-relaxed">
-                Acompanhamento técnico para garantir que a execução da obra seja fiel ao projeto, dentro do prazo e do orçamento.
-              </p>
-              <ul className="space-y-2 text-sm text-gray-500 group-hover:text-gray-400">
-                <li className="flex items-center"><CheckCircle2 size={16} className="mr-2"/> Acompanhamento de Obra</li>
-                <li className="flex items-center"><CheckCircle2 size={16} className="mr-2"/> Viabilidade Técnica</li>
-                <li className="flex items-center"><CheckCircle2 size={16} className="mr-2"/> Consultoria Online</li>
-              </ul>
+              <p className="text-gray-600 group-hover:text-gray-300 mb-6 leading-relaxed">Acompanhamento técnico para garantir que a execução da obra seja fiel ao projeto, dentro do prazo e do orçamento.</p>
+              <ul className="space-y-2 text-sm text-gray-500 group-hover:text-gray-400"><li className="flex items-center"><CheckCircle2 size={16} className="mr-2"/> Acompanhamento de Obra</li><li className="flex items-center"><CheckCircle2 size={16} className="mr-2"/> Viabilidade Técnica</li><li className="flex items-center"><CheckCircle2 size={16} className="mr-2"/> Consultoria Online</li></ul>
             </div>
           </div>
         </div>
@@ -554,29 +440,19 @@ const App = () => {
         <div className="container mx-auto px-6 md:px-12">
           <div className="grid md:grid-cols-2 gap-16 lg:gap-24">
             
-            {/* Contact Info */}
+            {/* Contact Info (ATUALIZADO: Sem endereço, com WhatsApp) */}
             <div className="space-y-12">
               <div>
                 <h2 className="text-4xl md:text-5xl font-light mb-6">Vamos construir <br/>o <span className="font-bold">extraordinário?</span></h2>
-                <p className="text-gray-400 leading-relaxed text-lg">
-                  Estamos prontos para ouvir sobre o seu novo desafio. Preencha o briefing ao lado ou entre em contato direto pelos nossos canais.
-                </p>
+                <p className="text-gray-400 leading-relaxed text-lg">Estamos prontos para ouvir sobre o seu novo desafio. Preencha o briefing ao lado ou entre em contato direto pelos nossos canais.</p>
               </div>
 
               <div className="space-y-6">
-                <div className="flex items-start space-x-4">
-                  <MapPin className="mt-1 text-gray-500" />
-                  <div>
-                    <h4 className="font-bold text-lg">Escritório Central</h4>
-                    <p className="text-gray-400">Av José Paulino Nogueira, 2000<br/>Paulínia, SP - Brasil</p>
-                  </div>
-                </div>
-                
                 <div className="flex items-center space-x-4">
                   <Phone className="text-gray-500" />
                   <div>
                     <h4 className="font-bold text-lg">Telefone / WhatsApp</h4>
-                    <p className="text-gray-400">+55 (19) 97134-9692</p>
+                    <p className="text-gray-400">+55 (19) 97428-2792</p>
                   </div>
                 </div>
 
@@ -584,95 +460,68 @@ const App = () => {
                   <Mail className="text-gray-500" />
                   <div>
                     <h4 className="font-bold text-lg">Email</h4>
-                    <p className="text-gray-400">contato@archlabstudio.com.br</p>
+                    <p className="text-gray-400">contato@archlab.com.br</p>
                   </div>
                 </div>
               </div>
 
               <div className="flex space-x-6 pt-6">
-                <a href="https://www.instagram.com/arch.lab_studio/" target="_blank" rel="noopener noreferrer" className="p-3 border border-gray-700 rounded-full hover:bg-white hover:text-black transition-colors">
+                <a href="https://www.instagram.com/archlab.br" target="_blank" rel="noopener noreferrer" className="p-3 border border-gray-700 rounded-full hover:bg-white hover:text-black transition-colors">
                   <Instagram size={20} />
                 </a>
-                <a href="#" className="p-3 border border-gray-700 rounded-full hover:bg-white hover:text-black transition-colors">
-                  <Linkedin size={20} />
+                <a href="https://wa.me/5519974282792" target="_blank" rel="noopener noreferrer" className="p-3 border border-gray-700 rounded-full hover:bg-white hover:text-black transition-colors">
+                  <WhatsAppIcon size={20} />
                 </a>
               </div>
             </div>
 
-            {/* Briefing Form */}
+            {/* Briefing Form (ATUALIZADO: Sem Budget) */}
             <div className="bg-white/5 p-8 md:p-10 rounded-sm border border-white/10 backdrop-blur-sm">
               <h3 className="text-2xl font-light mb-8 border-b border-gray-700 pb-4">Briefing Inicial</h3>
               
               {formStatus === 'success' ? (
                 <div className="text-center py-12 animate-fade-in">
-                  <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-green-500/20 text-green-400 mb-4">
-                    <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
-                  </div>
+                  <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-green-500/20 text-green-400 mb-4"><CheckCircle2 className="w-8 h-8"/></div>
                   <h4 className="text-2xl font-bold mb-2">Mensagem Recebida</h4>
                   <p className="text-gray-400">Nossa equipe analisará seu briefing e entrará em contato em até 24h.</p>
                   <button onClick={() => window.location.reload()} className="mt-6 text-sm underline text-gray-500 hover:text-white">Enviar outro projeto</button>
                 </div>
-              ) : formStatus === 'error' ? (
-                 <div className="text-center py-12 animate-fade-in">
-                   <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-red-500/20 text-red-400 mb-4">
-                     <X className="w-8 h-8"/>
-                   </div>
-                   <h4 className="text-xl font-bold mb-2">Erro no envio</h4>
-                   <p className="text-gray-400 mb-6">Verifique se o código do Formspree (ex: xeelonnr) está correto no código.</p>
-                   <button onClick={() => setFormStatus('idle')} className="text-sm underline text-gray-500 hover:text-white">Tentar novamente</button>
-                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-6">
                   <div className="grid md:grid-cols-2 gap-6">
                     <div className="space-y-2">
                       <label htmlFor="nome" className="text-xs uppercase tracking-wider text-gray-500">Nome Completo</label>
-                      <input id="nome" required name="nome" type="text" className="w-full bg-transparent border-b border-gray-700 focus:border-white py-2 outline-none transition-colors" placeholder="Seu nome" />
+                      <input required name="nome" type="text" className="w-full bg-transparent border-b border-gray-700 focus:border-white py-2 outline-none transition-colors" placeholder="Seu nome" />
                     </div>
                     <div className="space-y-2">
                       <label htmlFor="telefone" className="text-xs uppercase tracking-wider text-gray-500">Telefone</label>
-                      <input id="telefone" required name="telefone" type="tel" className="w-full bg-transparent border-b border-gray-700 focus:border-white py-2 outline-none transition-colors" placeholder="(00) 00000-0000" />
+                      <input required name="telefone" type="tel" className="w-full bg-transparent border-b border-gray-700 focus:border-white py-2 outline-none transition-colors" placeholder="(00) 00000-0000" />
                     </div>
                   </div>
 
                   <div className="space-y-2">
                     <label htmlFor="email" className="text-xs uppercase tracking-wider text-gray-500">Email Corporativo/Pessoal</label>
-                    <input id="email" required name="email" type="email" className="w-full bg-transparent border-b border-gray-700 focus:border-white py-2 outline-none transition-colors" placeholder="seuemail@exemplo.com" />
+                    <input required name="email" type="email" className="w-full bg-transparent border-b border-gray-700 focus:border-white py-2 outline-none transition-colors" placeholder="seuemail@exemplo.com" />
                   </div>
 
-                  <div className="grid md:grid-cols-2 gap-6">
-                    <div className="space-y-2">
-                      <label htmlFor="tipo_projeto" className="text-xs uppercase tracking-wider text-gray-500">Tipo de Projeto</label>
-                      <select id="tipo_projeto" name="tipo_projeto" className="w-full bg-transparent border-b border-gray-700 focus:border-white py-2 outline-none transition-colors text-gray-300">
-                        <option className="bg-gray-900" value="">Selecione...</option>
-                        <option className="bg-gray-900" value="residencial-nova">Residencial (Nova Construção)</option>
-                        <option className="bg-gray-900" value="residencial-reforma">Residencial (Reforma)</option>
-                        <option className="bg-gray-900" value="comercial-corporativo">Comercial (Corporativo)</option>
-                        <option className="bg-gray-900" value="comercial-varejo">Comercial (Varejo/Loja)</option>
-                        <option className="bg-gray-900" value="incorporacao">Incorporação Imobiliária</option>
-                      </select>
-                    </div>
-                    <div className="space-y-2">
-                      <label htmlFor="investimento" className="text-xs uppercase tracking-wider text-gray-500">Estimativa de Investimento</label>
-                      <select id="investimento" name="investimento" className="w-full bg-transparent border-b border-gray-700 focus:border-white py-2 outline-none transition-colors text-gray-300">
-                        <option className="bg-gray-900" value="">Selecione...</option>
-                        <option className="bg-gray-900" value="padrao">Até R$ 500k</option>
-                        <option className="bg-gray-900" value="medio">R$ 500k - R$ 1.5M</option>
-                        <option className="bg-gray-900" value="alto">R$ 1.5M - R$ 5M</option>
-                        <option className="bg-gray-900" value="premium">Acima de R$ 5M</option>
-                      </select>
-                    </div>
+                  <div className="space-y-2">
+                    <label htmlFor="tipo_projeto" className="text-xs uppercase tracking-wider text-gray-500">Tipo de Projeto</label>
+                    <select name="tipo_projeto" className="w-full bg-transparent border-b border-gray-700 focus:border-white py-2 outline-none transition-colors text-gray-300">
+                      <option className="bg-gray-900" value="">Selecione...</option>
+                      <option className="bg-gray-900" value="residencial-nova">Residencial (Nova Construção)</option>
+                      <option className="bg-gray-900" value="residencial-reforma">Residencial (Reforma)</option>
+                      <option className="bg-gray-900" value="comercial-corporativo">Comercial (Corporativo)</option>
+                      <option className="bg-gray-900" value="comercial-varejo">Comercial (Varejo/Loja)</option>
+                      <option className="bg-gray-900" value="incorporacao">Incorporação Imobiliária</option>
+                    </select>
                   </div>
 
                   <div className="space-y-2">
                     <label htmlFor="mensagem" className="text-xs uppercase tracking-wider text-gray-500">Sobre o Projeto</label>
-                    <textarea id="mensagem" name="mensagem" rows="3" className="w-full bg-transparent border-b border-gray-700 focus:border-white py-2 outline-none transition-colors resize-none" placeholder="Conte brevemente sobre o local, metragem e suas expectativas..."></textarea>
+                    <textarea name="mensagem" rows="3" className="w-full bg-transparent border-b border-gray-700 focus:border-white py-2 outline-none transition-colors resize-none" placeholder="Conte brevemente sobre o local, metragem e suas expectativas..."></textarea>
                   </div>
 
-                  <button 
-                    disabled={formStatus === 'submitting'}
-                    type="submit" 
-                    className="w-full bg-white text-black font-bold uppercase tracking-widest py-4 hover:bg-gray-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed mt-4"
-                  >
+                  <button disabled={formStatus === 'submitting'} type="submit" className="w-full bg-white text-black font-bold uppercase tracking-widest py-4 hover:bg-gray-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed mt-4">
                     {formStatus === 'submitting' ? 'Enviando...' : 'Enviar Briefing'}
                   </button>
                 </form>
@@ -682,7 +531,18 @@ const App = () => {
         </div>
       </section>
 
-      {/* Privacy Policy Modal */}
+      {/* Footer */}
+      <footer className="bg-black text-white py-12 border-t border-white/10">
+        <div className="container mx-auto px-6 text-center md:text-left flex flex-col md:flex-row justify-between items-center text-xs text-gray-500 uppercase tracking-widest">
+          <p>&copy; 2024 ArchLab Arquitetura. Todos os direitos reservados.</p>
+          <div className="flex space-x-6 mt-4 md:mt-0">
+            <button onClick={() => setIsPrivacyOpen(true)} className="hover:text-white transition-colors">Privacidade</button>
+            <button onClick={() => setIsTermsOpen(true)} className="hover:text-white transition-colors">Termos</button>
+          </div>
+        </div>
+      </footer>
+
+      {/* Privacy Policy Modal - Z-Index 9999 */}
       {isPrivacyOpen && (
         <TextModal title="Política de Privacidade" icon={Shield} onClose={() => setIsPrivacyOpen(false)}>
           <p className="mb-4"><strong>Última atualização: Outubro 2024</strong></p>
@@ -696,7 +556,7 @@ const App = () => {
         </TextModal>
       )}
 
-      {/* Terms of Use Modal */}
+      {/* Terms of Use Modal - Z-Index 9999 */}
       {isTermsOpen && (
         <TextModal title="Termos de Uso" icon={FileText} onClose={() => setIsTermsOpen(false)}>
           <p className="mb-4">Bem-vindo ao site do ArchLab. Ao acessar este site, você concorda com os seguintes termos:</p>
@@ -708,17 +568,6 @@ const App = () => {
           <p className="mb-4">As estimativas de investimento apresentadas no site são apenas referências e não constituem uma proposta comercial vinculativa.</p>
         </TextModal>
       )}
-
-      {/* Footer */}
-      <footer className="bg-black text-white py-12 border-t border-white/10">
-        <div className="container mx-auto px-6 text-center md:text-left flex flex-col md:flex-row justify-between items-center text-xs text-gray-500 uppercase tracking-widest">
-          <p>&copy; 2024 ArchLab Arquitetura. Todos os direitos reservados.</p>
-          <div className="flex space-x-6 mt-4 md:mt-0">
-            <button onClick={() => setIsPrivacyOpen(true)} className="hover:text-white transition-colors">Privacidade</button>
-            <button onClick={() => setIsTermsOpen(true)} className="hover:text-white transition-colors">Termos</button>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 };
