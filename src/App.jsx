@@ -61,13 +61,11 @@ const App = () => {
   // Bloqueio de Scroll Seguro (Correção do "Travamento")
   useEffect(() => {
     if (selectedProject || isPrivacyOpen || isTermsOpen) {
-      document.body.style.overflow = 'hidden'; // Trava
+      document.body.style.overflow = 'hidden'; 
       if (selectedProject) setCurrentImageIndex(0);
     } else {
-      document.body.style.overflow = 'auto'; // Destrava
+      document.body.style.overflow = 'auto'; 
     }
-    
-    // Limpeza de segurança: garante que destrava ao sair
     return () => { document.body.style.overflow = 'auto'; };
   }, [selectedProject, isPrivacyOpen, isTermsOpen]);
 
@@ -77,8 +75,6 @@ const App = () => {
   // Função segura de navegação suave
   const scrollToSection = (e, id) => {
     e.preventDefault();
-    
-    // Garante que fecha tudo antes de navegar
     setIsMobileMenuOpen(false);
     setSelectedProject(null);
     setIsPrivacyOpen(false);
@@ -106,52 +102,56 @@ const App = () => {
     }
   };
 
-  // BANCO DE DADOS DE PROJETOS
+  // BANCO DE DADOS DE PROJETOS (ATUALIZADO PARA PNG)
   const projects = [
     {
       id: 1,
-      title: "Casa Horizonte",
-      category: "residencial",
-      location: "São Paulo, SP",
-      image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2070&auto=format&fit=crop",
+      title: "Edifício Comercial Campinas",
+      category: "comercial",
+      location: "Campinas, SP",
+      image: "/projetos/predio-comercial.png",
       gallery: [
-        "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2070&auto=format&fit=crop",
-        "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?q=80&w=2070&auto=format&fit=crop", 
-        "https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?q=80&w=2070&auto=format&fit=crop"
+        "/projetos/predio-comercial.png"
       ],
-      desc: "Uma residência integrada à natureza com design bioclimático. O projeto prioriza a ventilação cruzada e o uso de materiais naturais como pedra e madeira de demolição."
+      desc: "Projeto arquitetônico para um edifício comercial em Campinas. A fachada apresenta uma composição simétrica elegante com grandes panos de vidro que maximizam a iluminação natural, contrastando com painéis ripados e elementos amadeirados no térreo. O layout foi pensado para abrigar múltiplas frentes de negócios com vagas recuadas e paisagismo integrado."
     },
     {
       id: 2,
-      title: "Torre Nexus",
+      title: "Galpão ERC Trading",
       category: "comercial",
-      location: "Faria Lima, SP",
-      image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2070&auto=format&fit=crop",
-      gallery: ["https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2070&auto=format&fit=crop"],
-      desc: "Sede corporativa com certificação LEED Platinum. Fachada em pele de vidro de alta performance e espaços de convivência que estimulam a colaboração."
+      location: "Campinas, SP",
+      image: "/projetos/erc-trading.png",
+      gallery: [
+        "/projetos/erc-trading.png"
+      ],
+      desc: "Desenvolvimento de galpão para o empreendimento da ERC Trading. O projeto une a robustez do concreto aparente com a estética industrial do tijolinho nas docas. Detalhes em brise metálico escuro na área administrativa não só conferem um visual corporativo forte, mas também garantem controle térmico para os escritórios voltados para a fachada."
     },
     {
       id: 3,
-      title: "Loft Industrial",
+      title: "Cozinha Afetiva",
       category: "residencial",
-      location: "Nova York, EUA",
-      image: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=2053&auto=format&fit=crop",
-      gallery: ["https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=2053&auto=format&fit=crop"],
-      desc: "Reforma completa de galpão histórico transformado em loft residencial, mantendo a estrutura original de tijolos aparentes e vigas metálicas."
+      location: "Projeto de Interiores",
+      image: "/projetos/cozinha-1.png",
+      gallery: [
+        "/projetos/cozinha-1.png",
+        "/projetos/cozinha-2.png",
+        "/projetos/cozinha-3.png",
+        "/projetos/cozinha-4.png"
+      ],
+      desc: "Projeto de reforma com enorme valor afetivo, desenvolvido para a avó de uma das arquitetas do nosso estúdio. Buscamos um equilíbrio perfeito entre o nostálgico e o moderno. A marcenaria em tons de madeira natural com puxadores clássicos ganha vida e contraste com a península em azul suave e o piso de ladrilho hidráulico. Um espaço pensado para conforto, memória e funcionalidade."
     },
     {
       id: 4,
-      title: "Galeria Vanguarda",
-      category: "comercial",
-      location: "Lisboa, PT",
-      image: "https://images.unsplash.com/photo-1518112390430-f4ab02e9c2c8?q=80&w=2081&auto=format&fit=crop",
-      gallery: ["https://images.unsplash.com/photo-1518112390430-f4ab02e9c2c8?q=80&w=2081&auto=format&fit=crop"],
-      desc: "Espaço de arte contemporânea e varejo de luxo. A iluminação zenital e os amplos vãos livres permitem a flexibilidade necessária para exposições."
-    },
-    { id: 5, title: "Casa da Montanha", category: "residencial", location: "Campos do Jordão, SP", image: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=2070&auto=format&fit=crop", gallery: ["https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=2070&auto=format&fit=crop"], desc: "Refúgio de inverno com estrutura em madeira laminada colada e vidro." },
-    { id: 6, title: "Edifício Aurora", category: "comercial", location: "Curitiba, PR", image: "https://images.unsplash.com/photo-1454694220579-9d6672b12866?q=80&w=2070&auto=format&fit=crop", gallery: ["https://images.unsplash.com/photo-1454694220579-9d6672b12866?q=80&w=2070&auto=format&fit=crop"], desc: "Centro de inovação tecnológica com fachada responsiva." },
-    { id: 7, title: "Vila Costeira", category: "residencial", location: "Trancoso, BA", image: "https://images.unsplash.com/photo-1523217582562-09d0def993a6?q=80&w=2080&auto=format&fit=crop", gallery: ["https://images.unsplash.com/photo-1523217582562-09d0def993a6?q=80&w=2080&auto=format&fit=crop"], desc: "Residência de verão utilizando técnicas vernaculares locais." },
-    { id: 8, title: "Shopping Open Mall", category: "comercial", location: "Campinas, SP", image: "https://images.unsplash.com/photo-1519567241046-7f570eee3d9f?q=80&w=2070&auto=format&fit=crop", gallery: ["https://images.unsplash.com/photo-1519567241046-7f570eee3d9f?q=80&w=2070&auto=format&fit=crop"], desc: "Conceito de shopping aberto integrado com parque urbano." }
+      title: "Banheiro Menta & Mostarda",
+      category: "residencial",
+      location: "Projeto de Interiores",
+      image: "/projetos/banheiro-1.png",
+      gallery: [
+        "/projetos/banheiro-1.png",
+        "/projetos/banheiro-2.png"
+      ],
+      desc: "Parte do projeto afetivo residencial, este banheiro ousa na combinação de cores e texturas. O revestimento de listras verticais em tons de verde menta cria uma atmosfera vintage atualizada, que contrasta maravilhosamente com os metais e barras de acessibilidade em amarelo vibrante. O box texturizado (vidro canelado escuro) adiciona uma camada extra de sofisticação tátil ao ambiente."
+    }
   ];
 
   const filteredProjects = activeCategory === 'todos' 
@@ -183,7 +183,7 @@ const App = () => {
     } catch (error) { setFormStatus('error'); }
   };
 
-  // Componente de Modal Genérico (com Z-Index aumentado para evitar bugs)
+  // Componente de Modal Genérico
   const TextModal = ({ title, onClose, children, icon: Icon }) => (
     <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/95 backdrop-blur-sm animate-fade-in" onClick={onClose}>
       <div className="bg-white w-full max-w-2xl h-auto max-h-[80vh] overflow-y-auto relative shadow-2xl rounded-sm p-8 md:p-12 animate-scale-up" onClick={e => e.stopPropagation()}>
@@ -265,7 +265,7 @@ const App = () => {
         </div>
       </header>
 
-      {/* Intro / Philosophy - TEXTO ATUALIZADO (Pertinência/Função) */}
+      {/* Intro / Philosophy */}
       <section id="about" className="py-32 bg-white">
         <div className="container mx-auto px-6 md:px-12">
           <div className="grid md:grid-cols-12 gap-12 items-start">
@@ -313,7 +313,7 @@ const App = () => {
             {visibleProjects.map((project, index) => (
               <div 
                 key={project.id} 
-                className="group cursor-pointer"
+                className="group cursor-pointer animate-fade-in-slide"
                 style={{ animationDelay: `${index * 100}ms` }} 
                 onClick={() => setSelectedProject(project)}
               >
@@ -322,6 +322,7 @@ const App = () => {
                     src={project.image} 
                     alt={project.title} 
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    onError={(e) => { e.target.src = "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800&auto=format&fit=crop"; }}
                   />
                   <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center">
                     <span className="bg-white text-black px-6 py-3 text-sm tracking-widest uppercase transition-transform duration-300 transform translate-y-4 group-hover:translate-y-0">Ver Detalhes</span>
@@ -354,7 +355,7 @@ const App = () => {
         </div>
       </section>
 
-      {/* Project Details Modal - Z-Index 9999 para garantir visibilidade */}
+      {/* Project Details Modal */}
       {selectedProject && (
         <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 md:p-8 bg-black/95 backdrop-blur-sm animate-fade-in" onClick={() => setSelectedProject(null)}>
           <div className="bg-white w-full max-w-5xl h-full md:h-auto md:max-h-[90vh] overflow-y-auto relative shadow-2xl animate-scale-up" onClick={e => e.stopPropagation()}>
@@ -372,9 +373,10 @@ const App = () => {
                    alt={`${selectedProject.title} ${currentImageIndex + 1}`} 
                    className="absolute inset-0 w-full h-full object-cover transition-opacity duration-500 animate-fade-in" 
                    key={currentImageIndex} 
+                   onError={(e) => { e.target.src = "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800&auto=format&fit=crop"; }}
                  />
                  
-                 {/* Setas de navegação (Só mostra se tiver galeria com + de 1 foto) */}
+                 {/* Setas de navegação */}
                  {selectedProject.gallery && selectedProject.gallery.length > 1 && (
                    <>
                      <button onClick={prevImage} className="absolute left-4 top-1/2 -translate-y-1/2 p-2 bg-white/80 hover:bg-white text-black rounded-full opacity-0 group-hover:opacity-100 transition-opacity"><ChevronLeft size={24} /></button>
@@ -440,7 +442,7 @@ const App = () => {
         <div className="container mx-auto px-6 md:px-12">
           <div className="grid md:grid-cols-2 gap-16 lg:gap-24">
             
-            {/* Contact Info (ATUALIZADO: Sem endereço, com WhatsApp) */}
+            {/* Contact Info */}
             <div className="space-y-12">
               <div>
                 <h2 className="text-4xl md:text-5xl font-light mb-6">Vamos construir <br/>o <span className="font-bold">extraordinário?</span></h2>
@@ -475,7 +477,7 @@ const App = () => {
               </div>
             </div>
 
-            {/* Briefing Form (ATUALIZADO: Sem Budget) */}
+            {/* Briefing Form */}
             <div className="bg-white/5 p-8 md:p-10 rounded-sm border border-white/10 backdrop-blur-sm">
               <h3 className="text-2xl font-light mb-8 border-b border-gray-700 pb-4">Briefing Inicial</h3>
               
@@ -518,7 +520,7 @@ const App = () => {
 
                   <div className="space-y-2">
                     <label htmlFor="mensagem" className="text-xs uppercase tracking-wider text-gray-500">Sobre o Projeto</label>
-                    <textarea name="mensagem" rows="3" className="w-full bg-transparent border-b border-gray-700 focus:border-white py-2 outline-none transition-colors resize-none" placeholder="Conte brevemente sobre o local, metragem e suas expectativas..."></textarea>
+                    <textarea name="mensagem" rows="3" className="w-full bg-transparent border-b border-gray-700 focus:border-white py-2 outline-none transition-colors resize-none" placeholder="Fale-nos sobre o local, área e expectativas..."></textarea>
                   </div>
 
                   <button disabled={formStatus === 'submitting'} type="submit" className="w-full bg-white text-black font-bold uppercase tracking-widest py-4 hover:bg-gray-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed mt-4">
@@ -542,7 +544,7 @@ const App = () => {
         </div>
       </footer>
 
-      {/* Privacy Policy Modal - Z-Index 9999 */}
+      {/* Privacy Policy Modal */}
       {isPrivacyOpen && (
         <TextModal title="Política de Privacidade" icon={Shield} onClose={() => setIsPrivacyOpen(false)}>
           <p className="mb-4"><strong>Última atualização: Outubro 2024</strong></p>
@@ -556,7 +558,7 @@ const App = () => {
         </TextModal>
       )}
 
-      {/* Terms of Use Modal - Z-Index 9999 */}
+      {/* Terms of Use Modal */}
       {isTermsOpen && (
         <TextModal title="Termos de Uso" icon={FileText} onClose={() => setIsTermsOpen(false)}>
           <p className="mb-4">Bem-vindo ao site do ArchLab. Ao acessar este site, você concorda com os seguintes termos:</p>
