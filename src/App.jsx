@@ -142,7 +142,7 @@ const App = () => {
     },
     {
       id: 4,
-      title: "Banheiro Menta & Mostarda",
+      title: "Banheiro da Vó",
       category: "residencial",
       location: "Projeto de Interiores",
       image: "/projetos/banheiro-1.png",
