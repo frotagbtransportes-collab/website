@@ -279,7 +279,7 @@ const App = () => {
             <div className="md:col-span-7 md:pl-12 space-y-8 text-lg font-light leading-relaxed text-gray-600 animate-fade-in-slide animate-delay-100">
               <p>No <span className="font-medium text-black">ArchLab</span>, não nos prendemos a rótulos ou estilos pré-definidos. A nossa assinatura é a pertinência. Acreditamos que a verdadeira arquitetura nasce da resposta exata ao que o projeto exige.</p>
               <p>Unimos o funcional ao estético de forma inseparável. Se o espaço pede silêncio, desenhamos calma; se pede impacto, desenhamos ousadia. O nosso compromisso é <span className="italic text-gray-900">desenhar o necessário</span> com inteligência, criando espaços que servem, antes de tudo, à vida de quem os habita.</p>
-              <div className="pt-8"><p className="text-xs font-bold tracking-widest uppercase text-black">Arquitetura Sob Medida • Desde 2024</p></div>
+              <div className="pt-8"><p className="text-xs font-bold tracking-widest uppercase text-black">Arquitetura Sob Medida • Desde 2025</p></div>
             </div>
           </div>
         </div>
@@ -536,7 +536,7 @@ const App = () => {
       {/* Footer */}
       <footer className="bg-black text-white py-12 border-t border-white/10">
         <div className="container mx-auto px-6 text-center md:text-left flex flex-col md:flex-row justify-between items-center text-xs text-gray-500 uppercase tracking-widest">
-          <p>&copy; 2024 ArchLab Arquitetura. Todos os direitos reservados.</p>
+          <p>&copy; 2025 ArchLab Arquitetura. Todos os direitos reservados.</p>
           <div className="flex space-x-6 mt-4 md:mt-0">
             <button onClick={() => setIsPrivacyOpen(true)} className="hover:text-white transition-colors">Privacidade</button>
             <button onClick={() => setIsTermsOpen(true)} className="hover:text-white transition-colors">Termos</button>
@@ -547,7 +547,7 @@ const App = () => {
       {/* Privacy Policy Modal */}
       {isPrivacyOpen && (
         <TextModal title="Política de Privacidade" icon={Shield} onClose={() => setIsPrivacyOpen(false)}>
-          <p className="mb-4"><strong>Última atualização: Outubro 2024</strong></p>
+          <p className="mb-4"><strong>Última atualização: Dezembro 2025</strong></p>
           <p className="mb-4">No ArchLab, levamos a sua privacidade a sério. Esta política descreve como coletamos, usamos e protegemos suas informações pessoais.</p>
           <h3 className="text-lg font-bold text-black mt-6 mb-2">1. Coleta de Dados</h3>
           <p className="mb-4">Coletamos informações que você nos fornece diretamente através do formulário de contato, como nome, e-mail, telefone e detalhes do projeto.</p>
