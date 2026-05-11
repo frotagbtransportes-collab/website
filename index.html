@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,9 +14,9 @@
                 extend: {
                     colors: {
                         brand: {
-                            black: '#0a0a0a',
-                            dark: '#171717',
-                            gold: '#d4af37', // Dourado premium inspirado na logo
+                            black: '#050505',
+                            dark: '#121212',
+                            gold: '#d4af37',
                             goldLight: '#facc15',
                         }
                     },
@@ -30,41 +30,108 @@
     </script>
 
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Montserrat:wght@700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Montserrat:wght@700;800&display=swap" rel="stylesheet">
     
     <!-- Phosphor Icons -->
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
 
+    <!-- GSAP & ScrollTrigger -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    
+    <!-- Vanilla Tilt para o efeito 3D no mouse -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.1/vanilla-tilt.min.js"></script>
+
     <style>
-        body { font-family: 'Inter', sans-serif; }
-        h1, h2, h3, h4, .font-heading { font-family: 'Montserrat', sans-serif; }
-        .bg-pattern {
-            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23d4af37' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        body { 
+            font-family: 'Inter', sans-serif; 
+            overflow-x: hidden;
         }
-        html { scroll-behavior: smooth; }
+        h1, h2, h3, h4, .font-heading { 
+            font-family: 'Montserrat', sans-serif; 
+        }
+        
+        /* Textura de fundo refinada */
+        .bg-pattern {
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23d4af37' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+
+        /* Efeito Glow acompanhando o mouse */
+        #mouse-glow {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(212,175,55,0.15) 0%, rgba(0,0,0,0) 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            z-index: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        /* Ocultar elementos para animação GSAP inicial */
+        .hero-elem, .reveal-up, .reveal-scale {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        /* Custom Scrollbar Apple-like */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #050505; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #333; 
+            border-radius: 5px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #d4af37; 
+        }
+        
+        /* Blur backdrop aprimorado */
+        .glass-nav {
+            background: rgba(18, 18, 18, 0.7);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+        }
     </style>
 </head>
-<body class="bg-brand-black text-white antialiased">
+<body class="bg-brand-black text-white antialiased selection:bg-brand-gold selection:text-black">
 
     <!-- Header / Nav -->
-    <nav class="fixed w-full z-50 bg-brand-dark/95 backdrop-blur-sm border-b border-white/10 transition-all duration-300" id="navbar">
+    <nav class="fixed w-full z-50 glass-nav border-b border-white/5 transition-all duration-300" id="navbar">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-20">
                 <!-- Logo -->
-                <div class="flex-shrink-0 flex items-center gap-3 cursor-pointer" onclick="window.scrollTo(0,0)">
-                    <i class="ph-fill ph-truck text-brand-gold text-4xl"></i>
+                <div class="flex-shrink-0 flex items-center gap-3 cursor-pointer group" onclick="window.scrollTo(0,0)">
+                    <div class="relative">
+                        <i class="ph-fill ph-truck text-brand-gold text-4xl transform group-hover:scale-110 transition-transform duration-300"></i>
+                        <div class="absolute inset-0 bg-brand-gold blur-md opacity-0 group-hover:opacity-40 transition-opacity duration-300"></div>
+                    </div>
                     <div>
                         <span class="font-heading font-extrabold text-2xl tracking-wider text-white block leading-none">GB<span class="text-brand-gold">EXPRESS</span></span>
-                        <span class="text-[0.65rem] tracking-[0.15em] text-gray-400 uppercase font-semibold">Transporte & Logística</span>
+                        <span class="text-[0.65rem] tracking-[0.15em] text-gray-400 uppercase font-medium">Transporte & Logística</span>
                     </div>
                 </div>
+                
                 <!-- Desktop Menu -->
                 <div class="hidden md:flex space-x-8 items-center">
-                    <a href="#diferenciais" class="text-gray-300 hover:text-brand-gold transition">Diferenciais</a>
-                    <a href="#frota" class="text-gray-300 hover:text-brand-gold transition">Nossa Frota</a>
-                    <a href="#contato" class="bg-brand-gold hover:bg-brand-goldLight text-black font-bold py-2 px-6 rounded-full transition flex items-center gap-2">
-                        <i class="ph ph-whatsapp-logo text-xl"></i>
-                        Orçamento Rápido
+                    <a href="#diferenciais" class="text-sm font-medium text-gray-300 hover:text-brand-gold transition-colors">Diferenciais</a>
+                    <a href="#frota" class="text-sm font-medium text-gray-300 hover:text-brand-gold transition-colors">Nossa Frota</a>
+                    <!-- Correção: Botão agora vai direto pro WhatsApp ao invés de descer a página -->
+                    <a href="https://wa.me/5519998232707?text=Ol%C3%A1!%20Gostaria%20de%20solicitar%20um%20or%C3%A7amento%20r%C3%A1pido." target="_blank" class="group relative inline-flex items-center justify-center gap-2 px-6 py-2.5 text-sm font-bold text-black bg-brand-gold rounded-full overflow-hidden transition-all hover:scale-105 hover:shadow-[0_0_20px_rgba(212,175,55,0.4)]">
+                        <span class="absolute inset-0 w-full h-full -mt-1 rounded-lg opacity-30 bg-gradient-to-b from-transparent via-transparent to-black"></span>
+                        <i class="ph ph-whatsapp-logo text-lg relative z-10"></i>
+                        <span class="relative z-10">Orçamento Rápido</span>
+                    </a>
+                </div>
+
+                <!-- Mobile Action Button (Correção pré-deploy para celulares) -->
+                <div class="md:hidden flex items-center">
+                    <a href="https://wa.me/5519998232707?text=Ol%C3%A1!%20Gostaria%20de%20solicitar%20um%20or%C3%A7amento%20r%C3%A1pido." target="_blank" class="flex items-center justify-center p-2.5 bg-brand-gold text-black rounded-full shadow-[0_0_15px_rgba(212,175,55,0.3)] hover:scale-105 transition-transform" aria-label="Falar no WhatsApp">
+                        <i class="ph-bold ph-whatsapp-logo text-2xl"></i>
                     </a>
                 </div>
             </div>
@@ -72,25 +139,35 @@
     </nav>
 
     <!-- Hero Section -->
-    <section class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden bg-brand-dark bg-pattern">
-        <div class="absolute inset-0 bg-gradient-to-r from-brand-black via-brand-black/90 to-transparent z-0"></div>
+    <section class="relative pt-32 pb-20 lg:pt-56 lg:pb-40 overflow-hidden bg-brand-black" id="hero-section">
+        <!-- Background Pattern animado via parallax -->
+        <div class="absolute inset-0 bg-pattern parallax-bg opacity-40 z-0"></div>
+        <div class="absolute inset-0 bg-gradient-to-b from-brand-black/40 via-brand-black/80 to-brand-black z-0"></div>
+        
+        <!-- Elemento de brilho que segue o mouse -->
+        <div id="mouse-glow" class="hidden lg:block"></div>
+
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <div class="lg:w-2/3">
-                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-brand-gold text-sm font-semibold mb-6">
+            <div class="lg:w-3/4">
+                <div class="hero-elem inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-brand-gold text-xs font-semibold uppercase tracking-widest mb-8 backdrop-blur-sm">
                     <i class="ph-fill ph-map-pin"></i> Paulínia, Campinas e Região
                 </div>
-                <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight mb-6">
-                    Logística <span class="text-brand-gold">Segura</span> e <br> Pontualidade <span class="text-brand-gold">Garantida</span>.
+                <h1 class="hero-elem text-5xl md:text-6xl lg:text-7xl font-extrabold leading-[1.1] mb-6 tracking-tight">
+                    Logística <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-gold to-brand-goldLight">Segura</span> e <br> Pontualidade <span class="relative inline-block">
+                        Garantida.
+                        <svg class="absolute w-full h-3 -bottom-1 left-0 text-brand-gold opacity-50" viewBox="0 0 100 10" preserveAspectRatio="none"><path d="M0 5 Q 50 10 100 5" stroke="currentColor" stroke-width="4" fill="transparent"/></svg>
+                    </span>
                 </h1>
-                <p class="text-lg md:text-xl text-gray-300 mb-8 max-w-2xl leading-relaxed">
+                <p class="hero-elem text-lg md:text-xl text-gray-400 mb-10 max-w-2xl leading-relaxed font-light">
                     Parceria estratégica para indústrias, e-commerces e supermercados. Entregas ágeis e seguras, com transparência total e cuidado absoluto com a sua mercadoria.
                 </p>
-                <div class="flex flex-col sm:flex-row gap-4">
-                    <a href="#contato" class="bg-brand-gold hover:bg-brand-goldLight text-black font-bold py-4 px-8 rounded-lg text-center transition text-lg flex justify-center items-center gap-2 shadow-[0_0_20px_rgba(212,175,55,0.3)]">
-                        Fazer Cotação Agora
-                        <i class="ph-bold ph-arrow-right"></i>
+                <div class="hero-elem flex flex-col sm:flex-row gap-5">
+                    <a href="#contato" class="group relative inline-flex items-center justify-center gap-3 px-8 py-4 text-lg font-bold text-black bg-brand-gold rounded-xl overflow-hidden transition-all hover:scale-[1.02] hover:shadow-[0_0_30px_rgba(212,175,55,0.3)]">
+                        <span class="absolute inset-0 w-full h-full -mt-1 rounded-lg opacity-20 bg-gradient-to-b from-transparent via-transparent to-black"></span>
+                        <span class="relative z-10">Fazer Cotação Agora</span>
+                        <i class="ph-bold ph-arrow-right relative z-10 transform group-hover:translate-x-1 transition-transform"></i>
                     </a>
-                    <a href="https://wa.me/5519998232707" target="_blank" class="bg-white/10 hover:bg-white/20 text-white font-bold py-4 px-8 rounded-lg text-center transition text-lg flex justify-center items-center gap-2 border border-white/10">
+                    <a href="https://wa.me/5519998232707" target="_blank" class="inline-flex items-center justify-center gap-3 px-8 py-4 text-lg font-bold text-white bg-white/5 border border-white/10 rounded-xl transition-all hover:bg-white/10 hover:border-white/20 backdrop-blur-sm">
                         <i class="ph ph-whatsapp-logo text-2xl text-green-500"></i>
                         Falar no WhatsApp
                     </a>
@@ -100,102 +177,105 @@
     </section>
 
     <!-- Diferenciais -->
-    <section id="diferenciais" class="py-20 bg-brand-black border-t border-white/5">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl md:text-4xl font-extrabold text-white mb-4">Por que escolher a <span class="text-brand-gold">GB Express?</span></h2>
-                <p class="text-gray-400 max-w-2xl mx-auto">Feito para empresas que não podem perder tempo e exigem qualidade.</p>
+    <section id="diferenciais" class="py-24 bg-brand-black relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center mb-20 reveal-up">
+                <h2 class="text-3xl md:text-5xl font-extrabold text-white mb-6 tracking-tight">Por que escolher a <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-gold to-brand-goldLight">GB Express?</span></h2>
+                <p class="text-gray-400 max-w-2xl mx-auto text-lg font-light">Desenhado para empresas que não podem perder tempo e exigem excelência em cada detalhe.</p>
             </div>
             
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 <!-- Item 1 -->
-                <div class="bg-brand-dark p-8 rounded-2xl border border-white/5 hover:border-brand-gold/30 transition group">
-                    <div class="w-14 h-14 bg-brand-gold/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-brand-gold transition">
-                        <i class="ph-fill ph-rocket-launch text-3xl text-brand-gold group-hover:text-black transition"></i>
+                <div class="reveal-up tilt-card bg-[#0a0a0a] p-8 rounded-3xl border border-white/5 shadow-2xl relative overflow-hidden group" data-tilt data-tilt-max="10" data-tilt-speed="400" data-tilt-glare="true" data-tilt-max-glare="0.05">
+                    <div class="absolute inset-0 bg-gradient-to-br from-brand-gold/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                    <div class="w-14 h-14 bg-brand-dark border border-white/10 rounded-2xl flex items-center justify-center mb-8 relative z-10 group-hover:border-brand-gold/30 transition-colors">
+                        <i class="ph-fill ph-rocket-launch text-2xl text-brand-gold drop-shadow-[0_0_8px_rgba(212,175,55,0.5)]"></i>
                     </div>
-                    <h3 class="text-xl font-bold mb-3 text-white">Coleta e Entrega Ágil</h3>
-                    <p class="text-gray-400 text-sm">Respostas rápidas no WhatsApp e logística desenhada para o seu prazo não falhar.</p>
+                    <h3 class="text-xl font-bold mb-3 text-white relative z-10">Coleta e Entrega Ágil</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed relative z-10">Respostas rápidas no WhatsApp e logística projetada para o seu prazo não falhar.</p>
                 </div>
                 <!-- Item 2 -->
-                <div class="bg-brand-dark p-8 rounded-2xl border border-white/5 hover:border-brand-gold/30 transition group">
-                    <div class="w-14 h-14 bg-brand-gold/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-brand-gold transition">
-                        <i class="ph-fill ph-package text-3xl text-brand-gold group-hover:text-black transition"></i>
+                <div class="reveal-up tilt-card bg-[#0a0a0a] p-8 rounded-3xl border border-white/5 shadow-2xl relative overflow-hidden group" data-tilt data-tilt-max="10" data-tilt-speed="400" data-tilt-glare="true" data-tilt-max-glare="0.05" style="transition-delay: 100ms;">
+                    <div class="absolute inset-0 bg-gradient-to-br from-brand-gold/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                    <div class="w-14 h-14 bg-brand-dark border border-white/10 rounded-2xl flex items-center justify-center mb-8 relative z-10 group-hover:border-brand-gold/30 transition-colors">
+                        <i class="ph-fill ph-package text-2xl text-brand-gold drop-shadow-[0_0_8px_rgba(212,175,55,0.5)]"></i>
                     </div>
-                    <h3 class="text-xl font-bold mb-3 text-white">Cuidado Total</h3>
-                    <p class="text-gray-400 text-sm">Tratamos sua mercadoria com o máximo de zelo, garantindo que chegue impecável ao destino.</p>
+                    <h3 class="text-xl font-bold mb-3 text-white relative z-10">Cuidado Total</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed relative z-10">Tratamos sua mercadoria com o máximo de zelo, garantindo que chegue impecável.</p>
                 </div>
                 <!-- Item 3 -->
-                <div class="bg-brand-dark p-8 rounded-2xl border border-white/5 hover:border-brand-gold/30 transition group">
-                    <div class="w-14 h-14 bg-brand-gold/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-brand-gold transition">
-                        <i class="ph-fill ph-device-mobile text-3xl text-brand-gold group-hover:text-black transition"></i>
+                <div class="reveal-up tilt-card bg-[#0a0a0a] p-8 rounded-3xl border border-white/5 shadow-2xl relative overflow-hidden group" data-tilt data-tilt-max="10" data-tilt-speed="400" data-tilt-glare="true" data-tilt-max-glare="0.05" style="transition-delay: 200ms;">
+                    <div class="absolute inset-0 bg-gradient-to-br from-brand-gold/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                    <div class="w-14 h-14 bg-brand-dark border border-white/10 rounded-2xl flex items-center justify-center mb-8 relative z-10 group-hover:border-brand-gold/30 transition-colors">
+                        <i class="ph-fill ph-device-mobile text-2xl text-brand-gold drop-shadow-[0_0_8px_rgba(212,175,55,0.5)]"></i>
                     </div>
-                    <h3 class="text-xl font-bold mb-3 text-white">Atualização em Tempo Real</h3>
-                    <p class="text-gray-400 text-sm">Transparência total. Você sabe exatamente onde sua carga está a cada momento.</p>
+                    <h3 class="text-xl font-bold mb-3 text-white relative z-10">Rastreio em Tempo Real</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed relative z-10">Transparência total. Você sabe exatamente onde sua carga está a cada momento.</p>
                 </div>
                 <!-- Item 4 -->
-                <div class="bg-brand-dark p-8 rounded-2xl border border-white/5 hover:border-brand-gold/30 transition group">
-                    <div class="w-14 h-14 bg-brand-gold/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-brand-gold transition">
-                        <i class="ph-fill ph-calendar-check text-3xl text-brand-gold group-hover:text-black transition"></i>
+                <div class="reveal-up tilt-card bg-[#0a0a0a] p-8 rounded-3xl border border-white/5 shadow-2xl relative overflow-hidden group" data-tilt data-tilt-max="10" data-tilt-speed="400" data-tilt-glare="true" data-tilt-max-glare="0.05" style="transition-delay: 300ms;">
+                    <div class="absolute inset-0 bg-gradient-to-br from-brand-gold/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                    <div class="w-14 h-14 bg-brand-dark border border-white/10 rounded-2xl flex items-center justify-center mb-8 relative z-10 group-hover:border-brand-gold/30 transition-colors">
+                        <i class="ph-fill ph-calendar-check text-2xl text-brand-gold drop-shadow-[0_0_8px_rgba(212,175,55,0.5)]"></i>
                     </div>
-                    <h3 class="text-xl font-bold mb-3 text-white">Disponibilidade</h3>
-                    <p class="text-gray-400 text-sm">Atendimento inclusive aos finais de semana para não parar a operação da sua empresa.</p>
+                    <h3 class="text-xl font-bold mb-3 text-white relative z-10">Disponibilidade 24/7</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed relative z-10">Atendimento inclusive aos finais de semana para não parar a sua operação.</p>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Frota e Cargas -->
-    <section id="frota" class="py-20 bg-brand-dark bg-pattern">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl md:text-4xl font-extrabold text-white mb-4">Soluções para o seu <span class="text-brand-gold">Tipo de Carga</span></h2>
-                <p class="text-gray-400 max-w-2xl mx-auto">Veículos rigorosamente higienizados e com manutenção em dia.</p>
+    <section id="frota" class="py-24 bg-brand-dark relative overflow-hidden">
+        <div class="absolute inset-0 bg-pattern parallax-bg-2 opacity-20 z-0"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center mb-20 reveal-up">
+                <h2 class="text-3xl md:text-5xl font-extrabold text-white mb-6 tracking-tight">Soluções para o seu <span class="text-brand-gold">Tipo de Carga</span></h2>
+                <p class="text-gray-400 max-w-2xl mx-auto text-lg font-light">Veículos rigorosamente higienizados, manutenção em dia e prontos para rodar.</p>
             </div>
 
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <!-- Fiorino -->
-                <div class="bg-brand-black rounded-2xl overflow-hidden border border-white/10 flex flex-col sm:flex-row items-center">
-                    <div class="p-8 sm:w-2/3">
-                        <div class="flex items-center gap-3 mb-4">
-                            <i class="ph-fill ph-car-profile text-4xl text-brand-gold"></i>
-                            <h3 class="text-2xl font-bold text-white">Utilitário Fiorino</h3>
-                        </div>
-                        <p class="text-gray-400 mb-6 text-sm">Ideal para entregas expressas, e-commerces e coletas rápidas urbanas.</p>
-                        <ul class="space-y-3">
-                            <li class="flex items-center gap-3 text-gray-300"><i class="ph-bold ph-check text-brand-gold"></i> Peças e equipamentos</li>
-                            <li class="flex items-center gap-3 text-gray-300"><i class="ph-bold ph-check text-brand-gold"></i> Produtos químicos</li>
-                            <li class="flex items-center gap-3 text-gray-300"><i class="ph-bold ph-check text-brand-gold"></i> Entregas rápidas de supermercado</li>
-                        </ul>
+                <div class="reveal-scale bg-brand-black rounded-3xl overflow-hidden border border-white/5 flex flex-col items-center group shadow-2xl hover:border-brand-gold/20 transition-all duration-500">
+                    <div class="w-full h-48 bg-gradient-to-b from-white/5 to-transparent flex items-center justify-center relative overflow-hidden">
+                        <div class="absolute inset-0 bg-brand-gold/5 scale-150 group-hover:scale-100 transition-transform duration-700 rounded-full blur-3xl"></div>
+                        <i class="ph-thin ph-car-profile text-7xl text-white/20 group-hover:text-brand-gold/40 transition-colors duration-500 relative z-10 transform group-hover:translate-x-4"></i>
                     </div>
-                    <div class="sm:w-1/3 bg-white/5 h-full min-h-[200px] w-full flex items-center justify-center p-6 border-t sm:border-t-0 sm:border-l border-white/10">
-                        <!-- Placeholder para foto real do veículo -->
-                        <div class="text-center">
-                            <i class="ph-thin ph-camera text-5xl text-gray-500 mb-2"></i>
-                            <p class="text-xs text-gray-500">Foto da Fiorino</p>
+                    <div class="p-10 w-full -mt-8 bg-brand-black rounded-t-[40px] relative z-20 border-t border-white/5">
+                        <div class="flex items-center gap-4 mb-6">
+                            <div class="p-3 bg-brand-gold/10 rounded-xl">
+                                <i class="ph-fill ph-lightning text-2xl text-brand-gold"></i>
+                            </div>
+                            <h3 class="text-2xl font-bold text-white tracking-tight">Utilitário Fiorino</h3>
                         </div>
+                        <p class="text-gray-400 mb-8 text-sm leading-relaxed">A escolha ideal para entregas expressas, logística de e-commerces e coletas urbanas que exigem agilidade extrema.</p>
+                        <ul class="space-y-4">
+                            <li class="flex items-center gap-3 text-gray-300 text-sm font-medium"><i class="ph-bold ph-check-circle text-brand-gold text-lg"></i> Peças e equipamentos técnicos</li>
+                            <li class="flex items-center gap-3 text-gray-300 text-sm font-medium"><i class="ph-bold ph-check-circle text-brand-gold text-lg"></i> Produtos químicos regulamentados</li>
+                            <li class="flex items-center gap-3 text-gray-300 text-sm font-medium"><i class="ph-bold ph-check-circle text-brand-gold text-lg"></i> Entregas rápidas B2B e B2C</li>
+                        </ul>
                     </div>
                 </div>
 
                 <!-- Caminhão 3/4 -->
-                <div class="bg-brand-black rounded-2xl overflow-hidden border border-white/10 flex flex-col sm:flex-row items-center">
-                    <div class="p-8 sm:w-2/3">
-                        <div class="flex items-center gap-3 mb-4">
-                            <i class="ph-fill ph-truck text-4xl text-brand-gold"></i>
-                            <h3 class="text-2xl font-bold text-white">Caminhão Baú 3/4</h3>
-                        </div>
-                        <p class="text-gray-400 mb-6 text-sm">Alta capacidade para contratos B2B, indústrias e distribuição.</p>
-                        <ul class="space-y-3">
-                            <li class="flex items-center gap-3 text-gray-300"><i class="ph-bold ph-check text-brand-gold"></i> Cargas Paletizadas</li>
-                            <li class="flex items-center gap-3 text-gray-300"><i class="ph-bold ph-check text-brand-gold"></i> Descartáveis, Limpeza e Cosméticos</li>
-                            <li class="flex items-center gap-3 text-gray-300"><i class="ph-bold ph-check text-brand-gold"></i> Frutas e Bebidas (Volume)</li>
-                        </ul>
+                <div class="reveal-scale bg-brand-black rounded-3xl overflow-hidden border border-white/5 flex flex-col items-center group shadow-2xl hover:border-brand-gold/20 transition-all duration-500" style="transition-delay: 100ms;">
+                    <div class="w-full h-48 bg-gradient-to-b from-white/5 to-transparent flex items-center justify-center relative overflow-hidden">
+                        <div class="absolute inset-0 bg-brand-gold/5 scale-150 group-hover:scale-100 transition-transform duration-700 rounded-full blur-3xl"></div>
+                        <i class="ph-thin ph-truck text-7xl text-white/20 group-hover:text-brand-gold/40 transition-colors duration-500 relative z-10 transform group-hover:translate-x-4"></i>
                     </div>
-                    <div class="sm:w-1/3 bg-white/5 h-full min-h-[200px] w-full flex items-center justify-center p-6 border-t sm:border-t-0 sm:border-l border-white/10">
-                        <!-- Placeholder para foto real do veículo -->
-                        <div class="text-center">
-                            <i class="ph-thin ph-camera text-5xl text-gray-500 mb-2"></i>
-                            <p class="text-xs text-gray-500">Foto do Caminhão</p>
+                    <div class="p-10 w-full -mt-8 bg-brand-black rounded-t-[40px] relative z-20 border-t border-white/5">
+                        <div class="flex items-center gap-4 mb-6">
+                            <div class="p-3 bg-brand-gold/10 rounded-xl">
+                                <i class="ph-fill ph-package text-2xl text-brand-gold"></i>
+                            </div>
+                            <h3 class="text-2xl font-bold text-white tracking-tight">Caminhão Baú 3/4</h3>
                         </div>
+                        <p class="text-gray-400 mb-8 text-sm leading-relaxed">Alta capacidade volumétrica projetada para contratos B2B robustos, abastecimento de indústrias e centros de distribuição.</p>
+                        <ul class="space-y-4">
+                            <li class="flex items-center gap-3 text-gray-300 text-sm font-medium"><i class="ph-bold ph-check-circle text-brand-gold text-lg"></i> Cargas Paletizadas (Máxima segurança)</li>
+                            <li class="flex items-center gap-3 text-gray-300 text-sm font-medium"><i class="ph-bold ph-check-circle text-brand-gold text-lg"></i> Descartáveis, Limpeza e Cosméticos</li>
+                            <li class="flex items-center gap-3 text-gray-300 text-sm font-medium"><i class="ph-bold ph-check-circle text-brand-gold text-lg"></i> Frutas e Bebidas (Alto Volume)</li>
+                        </ul>
                     </div>
                 </div>
             </div>
@@ -203,62 +283,67 @@
     </section>
 
     <!-- Formulário de Orçamento Rápido -->
-    <section id="contato" class="py-20 bg-brand-black relative">
-        <!-- Divisor decorativo -->
-        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-1/3 h-1 bg-gradient-to-r from-transparent via-brand-gold to-transparent"></div>
+    <section id="contato" class="py-24 bg-brand-black relative">
+        <!-- Divisor decorativo Glow -->
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-2/3 h-[1px] bg-gradient-to-r from-transparent via-brand-gold to-transparent opacity-50"></div>
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-1/3 h-[100px] bg-brand-gold blur-[100px] opacity-10 pointer-events-none"></div>
         
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="bg-brand-dark rounded-3xl p-8 md:p-12 border border-white/10 shadow-2xl relative overflow-hidden">
-                <div class="absolute top-0 right-0 p-12 opacity-5 pointer-events-none">
-                    <i class="ph-fill ph-truck text-9xl text-brand-gold"></i>
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="reveal-up bg-[#0a0a0a] rounded-[2rem] p-8 md:p-14 border border-white/5 shadow-2xl relative overflow-hidden group">
+                <div class="absolute top-0 right-0 p-12 opacity-[0.02] group-hover:opacity-5 transition-opacity duration-700 pointer-events-none transform translate-x-10 -translate-y-10">
+                    <i class="ph-fill ph-truck text-[15rem] text-brand-gold"></i>
                 </div>
                 
-                <h2 class="text-3xl font-extrabold text-white mb-2">Solicite um Orçamento</h2>
-                <p class="text-gray-400 mb-8">Preencha rapidamente e receba a resposta direto no WhatsApp com preço justo e sem surpresas.</p>
+                <h2 class="text-3xl md:text-4xl font-extrabold text-white mb-3 tracking-tight">Solicite um Orçamento</h2>
+                <p class="text-gray-400 mb-10 text-lg font-light">Preencha rapidamente e receba a proposta direto no seu WhatsApp, <span class="text-brand-gold font-medium">sem compromisso</span>.</p>
                 
                 <form id="quoteForm" onsubmit="sendToWhatsApp(event)" class="space-y-6 relative z-10">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-400 mb-2">Nome ou Empresa *</label>
-                            <input type="text" id="nome" required class="w-full bg-brand-black border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-brand-gold focus:ring-1 focus:ring-brand-gold transition">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div class="relative">
+                            <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 ml-1">Nome ou Empresa</label>
+                            <input type="text" id="nome" required class="w-full bg-[#121212] border border-white/5 rounded-xl px-5 py-4 text-white focus:outline-none focus:border-brand-gold/50 focus:bg-[#1a1a1a] transition-all peer">
                         </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-400 mb-2">Seu WhatsApp *</label>
-                            <input type="tel" id="telefone" required placeholder="(00) 00000-0000" class="w-full bg-brand-black border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-brand-gold focus:ring-1 focus:ring-brand-gold transition">
+                        <div class="relative">
+                            <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 ml-1">Seu WhatsApp</label>
+                            <input type="tel" id="telefone" required placeholder="(00) 00000-0000" class="w-full bg-[#121212] border border-white/5 rounded-xl px-5 py-4 text-white focus:outline-none focus:border-brand-gold/50 focus:bg-[#1a1a1a] transition-all">
                         </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-400 mb-2">Endereço de Coleta (Origem) *</label>
-                            <input type="text" id="origem" required placeholder="Ex: Paulínia - SP" class="w-full bg-brand-black border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-brand-gold focus:ring-1 focus:ring-brand-gold transition">
+                        <div class="relative">
+                            <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 ml-1">Endereço de Coleta (Origem)</label>
+                            <input type="text" id="origem" required placeholder="Ex: Paulínia - SP" class="w-full bg-[#121212] border border-white/5 rounded-xl px-5 py-4 text-white focus:outline-none focus:border-brand-gold/50 focus:bg-[#1a1a1a] transition-all">
                         </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-400 mb-2">Endereço de Entrega (Destino) *</label>
-                            <input type="text" id="destino" required placeholder="Ex: Campinas - SP" class="w-full bg-brand-black border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-brand-gold focus:ring-1 focus:ring-brand-gold transition">
+                        <div class="relative">
+                            <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 ml-1">Endereço de Entrega (Destino)</label>
+                            <input type="text" id="destino" required placeholder="Ex: Campinas - SP" class="w-full bg-[#121212] border border-white/5 rounded-xl px-5 py-4 text-white focus:outline-none focus:border-brand-gold/50 focus:bg-[#1a1a1a] transition-all">
                         </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-400 mb-2">Tipo de Mercadoria *</label>
-                            <select id="tipo" required class="w-full bg-brand-black border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-brand-gold focus:ring-1 focus:ring-brand-gold transition appearance-none">
-                                <option value="" disabled selected>Selecione o tipo</option>
-                                <option value="Paletizada">Carga Paletizada</option>
-                                <option value="Químicos">Produtos Químicos</option>
-                                <option value="Peças/Equipamentos">Peças / Equipamentos</option>
-                                <option value="Alimentos/Bebidas">Frutas / Bebidas</option>
-                                <option value="Outros">Outros</option>
-                            </select>
+                        <div class="relative">
+                            <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 ml-1">Tipo de Mercadoria</label>
+                            <div class="relative">
+                                <select id="tipo" required class="w-full bg-[#121212] border border-white/5 rounded-xl px-5 py-4 text-white focus:outline-none focus:border-brand-gold/50 focus:bg-[#1a1a1a] transition-all appearance-none cursor-pointer">
+                                    <option value="" disabled selected>Selecione o tipo de carga</option>
+                                    <option value="Paletizada">Carga Paletizada</option>
+                                    <option value="Químicos">Produtos Químicos</option>
+                                    <option value="Peças/Equipamentos">Peças / Equipamentos</option>
+                                    <option value="Alimentos/Bebidas">Frutas / Bebidas</option>
+                                    <option value="Outros">Outros</option>
+                                </select>
+                                <i class="ph-bold ph-caret-down absolute right-5 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none"></i>
+                            </div>
                         </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-400 mb-2">Peso Estimado (kg) / Volume</label>
-                            <input type="text" id="peso" placeholder="Ex: 500kg ou 2 pallets" class="w-full bg-brand-black border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-brand-gold focus:ring-1 focus:ring-brand-gold transition">
+                        <div class="relative">
+                            <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 ml-1">Peso Estimado / Volume</label>
+                            <input type="text" id="peso" placeholder="Ex: 500kg ou 2 pallets" class="w-full bg-[#121212] border border-white/5 rounded-xl px-5 py-4 text-white focus:outline-none focus:border-brand-gold/50 focus:bg-[#1a1a1a] transition-all">
                         </div>
                     </div>
                     
-                    <div>
-                        <label class="block text-sm font-medium text-gray-400 mb-2">Detalhes Adicionais</label>
-                        <textarea id="detalhes" rows="3" placeholder="Precisa de ajudante? Tem horário específico de recebimento?" class="w-full bg-brand-black border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-brand-gold focus:ring-1 focus:ring-brand-gold transition resize-none"></textarea>
+                    <div class="relative mt-8">
+                        <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 ml-1">Detalhes Adicionais (Opcional)</label>
+                        <textarea id="detalhes" rows="3" placeholder="Ex: Precisa de ajudante? Tem restrição de horário para descarregar?" class="w-full bg-[#121212] border border-white/5 rounded-xl px-5 py-4 text-white focus:outline-none focus:border-brand-gold/50 focus:bg-[#1a1a1a] transition-all resize-none"></textarea>
                     </div>
 
-                    <button type="submit" class="w-full bg-brand-gold hover:bg-brand-goldLight text-black font-bold py-4 px-8 rounded-lg transition text-lg flex justify-center items-center gap-2 mt-4">
-                        <i class="ph-bold ph-paper-plane-right"></i>
-                        Enviar Pedido de Cotação
+                    <button type="submit" class="w-full group relative inline-flex items-center justify-center gap-3 px-8 py-5 text-lg font-bold text-black bg-brand-gold rounded-xl overflow-hidden transition-all hover:scale-[1.02] hover:shadow-[0_0_30px_rgba(212,175,55,0.3)] mt-8">
+                        <span class="absolute inset-0 w-full h-full -mt-1 rounded-lg opacity-20 bg-gradient-to-b from-transparent via-transparent to-black"></span>
+                        <span class="relative z-10">Enviar Pedido de Cotação</span>
+                        <i class="ph-bold ph-paper-plane-right relative z-10 transform group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform"></i>
                     </button>
                 </form>
             </div>
@@ -266,65 +351,77 @@
     </section>
 
     <!-- Footer -->
-    <footer class="bg-brand-dark pt-16 pb-8 border-t border-white/5">
+    <footer class="bg-[#050505] pt-20 pb-10 border-t border-white/5">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-16 mb-16">
                 <div>
-                    <div class="flex items-center gap-2 mb-4">
-                        <i class="ph-fill ph-truck text-brand-gold text-3xl"></i>
-                        <span class="font-heading font-extrabold text-xl text-white block leading-none">GB<span class="text-brand-gold">EXPRESS</span></span>
+                    <div class="flex items-center gap-3 mb-6">
+                        <i class="ph-fill ph-truck text-brand-gold text-4xl"></i>
+                        <span class="font-heading font-extrabold text-2xl text-white block leading-none tracking-tight">GB<span class="text-brand-gold">EXPRESS</span></span>
                     </div>
-                    <p class="text-gray-400 text-sm leading-relaxed">
-                        Transporte seguro e pontualidade garantida. Atendemos o setor empresarial com excelência e cuidado total com sua mercadoria.
+                    <p class="text-gray-400 text-sm leading-relaxed font-light">
+                        Elevando o padrão do transporte rodoviário. Parceiro logístico de confiança para o setor empresarial, garantindo integridade e pontualidade.
                     </p>
                 </div>
                 
                 <div>
-                    <h4 class="text-white font-bold mb-4">Contatos Rápidos</h4>
-                    <ul class="space-y-3">
+                    <h4 class="text-white font-bold mb-6 tracking-wide text-sm uppercase">Contato Direto</h4>
+                    <ul class="space-y-4">
                         <li>
-                            <a href="https://wa.me/5519998232707" target="_blank" class="text-gray-400 hover:text-brand-gold transition flex items-center gap-2">
-                                <i class="ph-fill ph-whatsapp-logo text-xl"></i> (19) 99823-2707
+                            <a href="https://wa.me/5519998232707" target="_blank" class="text-gray-400 hover:text-brand-gold transition-colors flex items-center gap-3 text-sm font-medium group">
+                                <div class="p-2 bg-white/5 rounded-lg group-hover:bg-brand-gold/10 transition-colors">
+                                    <i class="ph-fill ph-whatsapp-logo text-xl"></i>
+                                </div>
+                                (19) 99823-2707
                             </a>
                         </li>
                         <li>
-                            <a href="mailto:frotagbtransportes@gmail.com" class="text-gray-400 hover:text-brand-gold transition flex items-center gap-2">
-                                <i class="ph-fill ph-envelope-simple text-xl"></i> frotagbtransportes@gmail.com
+                            <a href="mailto:frotagbtransportes@gmail.com" class="text-gray-400 hover:text-brand-gold transition-colors flex items-center gap-3 text-sm font-medium group">
+                                <div class="p-2 bg-white/5 rounded-lg group-hover:bg-brand-gold/10 transition-colors">
+                                    <i class="ph-fill ph-envelope-simple text-xl"></i>
+                                </div>
+                                frotagbtransportes@gmail.com
                             </a>
                         </li>
                     </ul>
                 </div>
 
                 <div>
-                    <h4 class="text-white font-bold mb-4">Atendimento</h4>
-                    <ul class="space-y-3">
-                        <li class="text-gray-400 flex items-center gap-2">
-                            <i class="ph-fill ph-map-pin text-brand-gold"></i> Paulínia, Campinas e Região
+                    <h4 class="text-white font-bold mb-6 tracking-wide text-sm uppercase">Operação</h4>
+                    <ul class="space-y-4">
+                        <li class="text-gray-400 flex items-center gap-3 text-sm font-medium">
+                            <div class="p-2 bg-white/5 rounded-lg">
+                                <i class="ph-fill ph-map-pin text-brand-gold text-xl"></i>
+                            </div>
+                            Paulínia, Campinas e Região
                         </li>
-                        <li class="text-gray-400 flex items-center gap-2">
-                            <i class="ph-fill ph-clock text-brand-gold"></i> Disp. aos finais de semana
+                        <li class="text-gray-400 flex items-center gap-3 text-sm font-medium">
+                            <div class="p-2 bg-white/5 rounded-lg">
+                                <i class="ph-fill ph-clock text-brand-gold text-xl"></i>
+                            </div>
+                            Disponibilidade 24/7
                         </li>
                     </ul>
                 </div>
             </div>
             
-            <div class="border-t border-white/10 pt-8 text-center md:flex md:justify-between md:text-left">
-                <p class="text-gray-500 text-sm">
+            <div class="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-gray-600 text-xs font-medium">
                     &copy; <span id="year"></span> GB Transporte Express. Todos os direitos reservados.
                 </p>
-                <p class="text-gray-500 text-sm mt-2 md:mt-0">
-                    Logística Inteligente
-                </p>
+                <div class="flex items-center gap-2 text-gray-600 text-xs font-bold uppercase tracking-widest">
+                    <span>Logística Inteligente</span>
+                </div>
             </div>
         </div>
     </footer>
 
-    <!-- Lógica do Formulário (Integração WhatsApp) -->
+    <!-- Lógica e Animações (Nível Apple) -->
     <script>
-        // Atualiza o ano no rodapé
+        // 1. Atualiza Ano
         document.getElementById('year').textContent = new Date().getFullYear();
 
-        // Envio para o WhatsApp
+        // 2. Integração WhatsApp
         function sendToWhatsApp(e) {
             e.preventDefault();
             
@@ -335,25 +432,125 @@
             const peso = document.getElementById('peso').value || 'Não informado';
             const detalhes = document.getElementById('detalhes').value || 'Nenhum detalhe extra.';
             
-            // Monta a mensagem que chegará no celular do Gabriel
-            let mensagem = `*NOVA COTAÇÃO PELO SITE* 🚚\n\n`;
+            let mensagem = `*NOVA COTAÇÃO (SITE PREMIUM)* 🚚\n\n`;
             mensagem += `*Empresa/Nome:* ${nome}\n`;
             mensagem += `*Origem:* ${origem}\n`;
             mensagem += `*Destino:* ${destino}\n`;
             mensagem += `*Tipo de Carga:* ${tipo}\n`;
             mensagem += `*Peso/Volume:* ${peso}\n`;
             mensagem += `*Detalhes:* ${detalhes}\n\n`;
-            mensagem += `Aguardo retorno!`;
+            mensagem += `Aguardo retorno ágil!`;
 
-            // Codifica a mensagem para a URL
             const textoCodificado = encodeURIComponent(mensagem);
-            
-            // Número do Gabriel
             const numeroTelefone = "5519998232707";
             
-            // Redireciona para o WhatsApp
             window.open(`https://wa.me/${numeroTelefone}?text=${textoCodificado}`, '_blank');
         }
+
+        // 3. Inicialização GSAP & Efeitos Avançados
+        document.addEventListener("DOMContentLoaded", (event) => {
+            
+            // Registra o plugin de Scroll
+            gsap.registerPlugin(ScrollTrigger);
+
+            // Animação inicial do Hero (Fade e Slide Up)
+            gsap.to(".hero-elem", {
+                y: 0,
+                opacity: 1,
+                duration: 1.2,
+                stagger: 0.15,
+                ease: "power4.out",
+                visibility: "visible",
+                delay: 0.2
+            });
+
+            // Animações de Scroll (Elementos surgindo)
+            gsap.utils.toArray('.reveal-up').forEach(elem => {
+                gsap.fromTo(elem, 
+                    { y: 60, opacity: 0, visibility: "hidden" },
+                    {
+                        scrollTrigger: {
+                            trigger: elem,
+                            start: "top 85%", // Dispara quando o topo do elemento atinge 85% da tela
+                        },
+                        y: 0,
+                        opacity: 1,
+                        visibility: "visible",
+                        duration: 1,
+                        ease: "power3.out"
+                    }
+                );
+            });
+
+            // Animação de Scroll (Scale in para os veículos)
+            gsap.utils.toArray('.reveal-scale').forEach(elem => {
+                gsap.fromTo(elem, 
+                    { scale: 0.95, opacity: 0, visibility: "hidden" },
+                    {
+                        scrollTrigger: {
+                            trigger: elem,
+                            start: "top 85%",
+                        },
+                        scale: 1,
+                        opacity: 1,
+                        visibility: "visible",
+                        duration: 1.2,
+                        ease: "expo.out"
+                    }
+                );
+            });
+
+            // Efeito Parallax no Background Pattern
+            gsap.to(".parallax-bg", {
+                yPercent: 30,
+                ease: "none",
+                scrollTrigger: {
+                    trigger: "#hero-section",
+                    start: "top top",
+                    end: "bottom top",
+                    scrub: true
+                }
+            });
+
+            gsap.to(".parallax-bg-2", {
+                yPercent: 20,
+                ease: "none",
+                scrollTrigger: {
+                    trigger: "#frota",
+                    start: "top bottom",
+                    end: "bottom top",
+                    scrub: true
+                }
+            });
+
+            // 4. Efeito do Mouse Glow no Hero Section
+            const glow = document.getElementById('mouse-glow');
+            const heroSection = document.getElementById('hero-section');
+
+            if(glow && heroSection) {
+                heroSection.addEventListener('mousemove', (e) => {
+                    const rect = heroSection.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    
+                    // Usa GSAP para mover o brilho suavemente (sem delay visual grosseiro)
+                    gsap.to(glow, {
+                        x: x,
+                        y: y,
+                        duration: 0.6,
+                        ease: "power2.out"
+                    });
+                });
+
+                heroSection.addEventListener('mouseenter', () => {
+                    gsap.to(glow, { opacity: 1, duration: 0.3 });
+                });
+
+                heroSection.addEventListener('mouseleave', () => {
+                    gsap.to(glow, { opacity: 0, duration: 0.5 });
+                });
+            }
+        });
     </script>
 </body>
 </html>
