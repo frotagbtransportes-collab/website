@@ -1,25 +1,359 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GB Transporte Express | Logística Segura e Pontual</title>
+    <meta name="description" content="Transporte logístico ágil para empresas, e-commerces e indústrias em Paulínia, Campinas e região. Frota com Fiorino e Caminhão 3/4.">
     
-    <!-- SEO BÁSICO -->
-    <title>ArchLab | Arquitetura Residencial e Comercial de Alto Padrão</title>
-    <meta name="description" content="Escritório de arquitetura especializado em projetos residenciais, reformas e espaços comerciais. Design contemporâneo, interiores e consultoria. Atendimento em todo o Brasil." />
-    <meta name="keywords" content="arquiteto, arquitetura, design de interiores, reforma, projeto residencial, projeto comercial, alto padrão" />
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            black: '#0a0a0a',
+                            dark: '#171717',
+                            gold: '#d4af37', // Dourado premium inspirado na logo
+                            goldLight: '#facc15',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        heading: ['Montserrat', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Montserrat:wght@700;800&display=swap" rel="stylesheet">
     
-    <!-- OPEN GRAPH (Para ficar bonito quando compartilha no WhatsApp/Instagram) -->
-    <meta property="og:title" content="ArchLab | Design que define o futuro." />
-    <meta property="og:description" content="Projetos arquitetônicos únicos que unem funcionalidade e estética." />
-    <meta property="og:image" content="https://archlabstudio.com.br/sua-imagem-de-capa.jpg" />
-    <meta property="og:url" content="https://archlabstudio.com.br/" />
-    
-    <title>ArchLab</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3, h4, .font-heading { font-family: 'Montserrat', sans-serif; }
+        .bg-pattern {
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23d4af37' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+        html { scroll-behavior: smooth; }
+    </style>
+</head>
+<body class="bg-brand-black text-white antialiased">
+
+    <!-- Header / Nav -->
+    <nav class="fixed w-full z-50 bg-brand-dark/95 backdrop-blur-sm border-b border-white/10 transition-all duration-300" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <!-- Logo -->
+                <div class="flex-shrink-0 flex items-center gap-3 cursor-pointer" onclick="window.scrollTo(0,0)">
+                    <i class="ph-fill ph-truck text-brand-gold text-4xl"></i>
+                    <div>
+                        <span class="font-heading font-extrabold text-2xl tracking-wider text-white block leading-none">GB<span class="text-brand-gold">EXPRESS</span></span>
+                        <span class="text-[0.65rem] tracking-[0.15em] text-gray-400 uppercase font-semibold">Transporte & Logística</span>
+                    </div>
+                </div>
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex space-x-8 items-center">
+                    <a href="#diferenciais" class="text-gray-300 hover:text-brand-gold transition">Diferenciais</a>
+                    <a href="#frota" class="text-gray-300 hover:text-brand-gold transition">Nossa Frota</a>
+                    <a href="#contato" class="bg-brand-gold hover:bg-brand-goldLight text-black font-bold py-2 px-6 rounded-full transition flex items-center gap-2">
+                        <i class="ph ph-whatsapp-logo text-xl"></i>
+                        Orçamento Rápido
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden bg-brand-dark bg-pattern">
+        <div class="absolute inset-0 bg-gradient-to-r from-brand-black via-brand-black/90 to-transparent z-0"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="lg:w-2/3">
+                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-brand-gold text-sm font-semibold mb-6">
+                    <i class="ph-fill ph-map-pin"></i> Paulínia, Campinas e Região
+                </div>
+                <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight mb-6">
+                    Logística <span class="text-brand-gold">Segura</span> e <br> Pontualidade <span class="text-brand-gold">Garantida</span>.
+                </h1>
+                <p class="text-lg md:text-xl text-gray-300 mb-8 max-w-2xl leading-relaxed">
+                    Parceria estratégica para indústrias, e-commerces e supermercados. Entregas ágeis e seguras, com transparência total e cuidado absoluto com a sua mercadoria.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <a href="#contato" class="bg-brand-gold hover:bg-brand-goldLight text-black font-bold py-4 px-8 rounded-lg text-center transition text-lg flex justify-center items-center gap-2 shadow-[0_0_20px_rgba(212,175,55,0.3)]">
+                        Fazer Cotação Agora
+                        <i class="ph-bold ph-arrow-right"></i>
+                    </a>
+                    <a href="https://wa.me/5519998232707" target="_blank" class="bg-white/10 hover:bg-white/20 text-white font-bold py-4 px-8 rounded-lg text-center transition text-lg flex justify-center items-center gap-2 border border-white/10">
+                        <i class="ph ph-whatsapp-logo text-2xl text-green-500"></i>
+                        Falar no WhatsApp
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Diferenciais -->
+    <section id="diferenciais" class="py-20 bg-brand-black border-t border-white/5">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-extrabold text-white mb-4">Por que escolher a <span class="text-brand-gold">GB Express?</span></h2>
+                <p class="text-gray-400 max-w-2xl mx-auto">Feito para empresas que não podem perder tempo e exigem qualidade.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Item 1 -->
+                <div class="bg-brand-dark p-8 rounded-2xl border border-white/5 hover:border-brand-gold/30 transition group">
+                    <div class="w-14 h-14 bg-brand-gold/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-brand-gold transition">
+                        <i class="ph-fill ph-rocket-launch text-3xl text-brand-gold group-hover:text-black transition"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3 text-white">Coleta e Entrega Ágil</h3>
+                    <p class="text-gray-400 text-sm">Respostas rápidas no WhatsApp e logística desenhada para o seu prazo não falhar.</p>
+                </div>
+                <!-- Item 2 -->
+                <div class="bg-brand-dark p-8 rounded-2xl border border-white/5 hover:border-brand-gold/30 transition group">
+                    <div class="w-14 h-14 bg-brand-gold/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-brand-gold transition">
+                        <i class="ph-fill ph-package text-3xl text-brand-gold group-hover:text-black transition"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3 text-white">Cuidado Total</h3>
+                    <p class="text-gray-400 text-sm">Tratamos sua mercadoria com o máximo de zelo, garantindo que chegue impecável ao destino.</p>
+                </div>
+                <!-- Item 3 -->
+                <div class="bg-brand-dark p-8 rounded-2xl border border-white/5 hover:border-brand-gold/30 transition group">
+                    <div class="w-14 h-14 bg-brand-gold/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-brand-gold transition">
+                        <i class="ph-fill ph-device-mobile text-3xl text-brand-gold group-hover:text-black transition"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3 text-white">Atualização em Tempo Real</h3>
+                    <p class="text-gray-400 text-sm">Transparência total. Você sabe exatamente onde sua carga está a cada momento.</p>
+                </div>
+                <!-- Item 4 -->
+                <div class="bg-brand-dark p-8 rounded-2xl border border-white/5 hover:border-brand-gold/30 transition group">
+                    <div class="w-14 h-14 bg-brand-gold/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-brand-gold transition">
+                        <i class="ph-fill ph-calendar-check text-3xl text-brand-gold group-hover:text-black transition"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3 text-white">Disponibilidade</h3>
+                    <p class="text-gray-400 text-sm">Atendimento inclusive aos finais de semana para não parar a operação da sua empresa.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Frota e Cargas -->
+    <section id="frota" class="py-20 bg-brand-dark bg-pattern">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-extrabold text-white mb-4">Soluções para o seu <span class="text-brand-gold">Tipo de Carga</span></h2>
+                <p class="text-gray-400 max-w-2xl mx-auto">Veículos rigorosamente higienizados e com manutenção em dia.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <!-- Fiorino -->
+                <div class="bg-brand-black rounded-2xl overflow-hidden border border-white/10 flex flex-col sm:flex-row items-center">
+                    <div class="p-8 sm:w-2/3">
+                        <div class="flex items-center gap-3 mb-4">
+                            <i class="ph-fill ph-car-profile text-4xl text-brand-gold"></i>
+                            <h3 class="text-2xl font-bold text-white">Utilitário Fiorino</h3>
+                        </div>
+                        <p class="text-gray-400 mb-6 text-sm">Ideal para entregas expressas, e-commerces e coletas rápidas urbanas.</p>
+                        <ul class="space-y-3">
+                            <li class="flex items-center gap-3 text-gray-300"><i class="ph-bold ph-check text-brand-gold"></i> Peças e equipamentos</li>
+                            <li class="flex items-center gap-3 text-gray-300"><i class="ph-bold ph-check text-brand-gold"></i> Produtos químicos</li>
+                            <li class="flex items-center gap-3 text-gray-300"><i class="ph-bold ph-check text-brand-gold"></i> Entregas rápidas de supermercado</li>
+                        </ul>
+                    </div>
+                    <div class="sm:w-1/3 bg-white/5 h-full min-h-[200px] w-full flex items-center justify-center p-6 border-t sm:border-t-0 sm:border-l border-white/10">
+                        <!-- Placeholder para foto real do veículo -->
+                        <div class="text-center">
+                            <i class="ph-thin ph-camera text-5xl text-gray-500 mb-2"></i>
+                            <p class="text-xs text-gray-500">Foto da Fiorino</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Caminhão 3/4 -->
+                <div class="bg-brand-black rounded-2xl overflow-hidden border border-white/10 flex flex-col sm:flex-row items-center">
+                    <div class="p-8 sm:w-2/3">
+                        <div class="flex items-center gap-3 mb-4">
+                            <i class="ph-fill ph-truck text-4xl text-brand-gold"></i>
+                            <h3 class="text-2xl font-bold text-white">Caminhão Baú 3/4</h3>
+                        </div>
+                        <p class="text-gray-400 mb-6 text-sm">Alta capacidade para contratos B2B, indústrias e distribuição.</p>
+                        <ul class="space-y-3">
+                            <li class="flex items-center gap-3 text-gray-300"><i class="ph-bold ph-check text-brand-gold"></i> Cargas Paletizadas</li>
+                            <li class="flex items-center gap-3 text-gray-300"><i class="ph-bold ph-check text-brand-gold"></i> Descartáveis, Limpeza e Cosméticos</li>
+                            <li class="flex items-center gap-3 text-gray-300"><i class="ph-bold ph-check text-brand-gold"></i> Frutas e Bebidas (Volume)</li>
+                        </ul>
+                    </div>
+                    <div class="sm:w-1/3 bg-white/5 h-full min-h-[200px] w-full flex items-center justify-center p-6 border-t sm:border-t-0 sm:border-l border-white/10">
+                        <!-- Placeholder para foto real do veículo -->
+                        <div class="text-center">
+                            <i class="ph-thin ph-camera text-5xl text-gray-500 mb-2"></i>
+                            <p class="text-xs text-gray-500">Foto do Caminhão</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Formulário de Orçamento Rápido -->
+    <section id="contato" class="py-20 bg-brand-black relative">
+        <!-- Divisor decorativo -->
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-1/3 h-1 bg-gradient-to-r from-transparent via-brand-gold to-transparent"></div>
+        
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-brand-dark rounded-3xl p-8 md:p-12 border border-white/10 shadow-2xl relative overflow-hidden">
+                <div class="absolute top-0 right-0 p-12 opacity-5 pointer-events-none">
+                    <i class="ph-fill ph-truck text-9xl text-brand-gold"></i>
+                </div>
+                
+                <h2 class="text-3xl font-extrabold text-white mb-2">Solicite um Orçamento</h2>
+                <p class="text-gray-400 mb-8">Preencha rapidamente e receba a resposta direto no WhatsApp com preço justo e sem surpresas.</p>
+                
+                <form id="quoteForm" onsubmit="sendToWhatsApp(event)" class="space-y-6 relative z-10">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-400 mb-2">Nome ou Empresa *</label>
+                            <input type="text" id="nome" required class="w-full bg-brand-black border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-brand-gold focus:ring-1 focus:ring-brand-gold transition">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-400 mb-2">Seu WhatsApp *</label>
+                            <input type="tel" id="telefone" required placeholder="(00) 00000-0000" class="w-full bg-brand-black border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-brand-gold focus:ring-1 focus:ring-brand-gold transition">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-400 mb-2">Endereço de Coleta (Origem) *</label>
+                            <input type="text" id="origem" required placeholder="Ex: Paulínia - SP" class="w-full bg-brand-black border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-brand-gold focus:ring-1 focus:ring-brand-gold transition">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-400 mb-2">Endereço de Entrega (Destino) *</label>
+                            <input type="text" id="destino" required placeholder="Ex: Campinas - SP" class="w-full bg-brand-black border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-brand-gold focus:ring-1 focus:ring-brand-gold transition">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-400 mb-2">Tipo de Mercadoria *</label>
+                            <select id="tipo" required class="w-full bg-brand-black border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-brand-gold focus:ring-1 focus:ring-brand-gold transition appearance-none">
+                                <option value="" disabled selected>Selecione o tipo</option>
+                                <option value="Paletizada">Carga Paletizada</option>
+                                <option value="Químicos">Produtos Químicos</option>
+                                <option value="Peças/Equipamentos">Peças / Equipamentos</option>
+                                <option value="Alimentos/Bebidas">Frutas / Bebidas</option>
+                                <option value="Outros">Outros</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-400 mb-2">Peso Estimado (kg) / Volume</label>
+                            <input type="text" id="peso" placeholder="Ex: 500kg ou 2 pallets" class="w-full bg-brand-black border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-brand-gold focus:ring-1 focus:ring-brand-gold transition">
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-400 mb-2">Detalhes Adicionais</label>
+                        <textarea id="detalhes" rows="3" placeholder="Precisa de ajudante? Tem horário específico de recebimento?" class="w-full bg-brand-black border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-brand-gold focus:ring-1 focus:ring-brand-gold transition resize-none"></textarea>
+                    </div>
+
+                    <button type="submit" class="w-full bg-brand-gold hover:bg-brand-goldLight text-black font-bold py-4 px-8 rounded-lg transition text-lg flex justify-center items-center gap-2 mt-4">
+                        <i class="ph-bold ph-paper-plane-right"></i>
+                        Enviar Pedido de Cotação
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-brand-dark pt-16 pb-8 border-t border-white/5">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
+                <div>
+                    <div class="flex items-center gap-2 mb-4">
+                        <i class="ph-fill ph-truck text-brand-gold text-3xl"></i>
+                        <span class="font-heading font-extrabold text-xl text-white block leading-none">GB<span class="text-brand-gold">EXPRESS</span></span>
+                    </div>
+                    <p class="text-gray-400 text-sm leading-relaxed">
+                        Transporte seguro e pontualidade garantida. Atendemos o setor empresarial com excelência e cuidado total com sua mercadoria.
+                    </p>
+                </div>
+                
+                <div>
+                    <h4 class="text-white font-bold mb-4">Contatos Rápidos</h4>
+                    <ul class="space-y-3">
+                        <li>
+                            <a href="https://wa.me/5519998232707" target="_blank" class="text-gray-400 hover:text-brand-gold transition flex items-center gap-2">
+                                <i class="ph-fill ph-whatsapp-logo text-xl"></i> (19) 99823-2707
+                            </a>
+                        </li>
+                        <li>
+                            <a href="mailto:frotagbtransportes@gmail.com" class="text-gray-400 hover:text-brand-gold transition flex items-center gap-2">
+                                <i class="ph-fill ph-envelope-simple text-xl"></i> frotagbtransportes@gmail.com
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-bold mb-4">Atendimento</h4>
+                    <ul class="space-y-3">
+                        <li class="text-gray-400 flex items-center gap-2">
+                            <i class="ph-fill ph-map-pin text-brand-gold"></i> Paulínia, Campinas e Região
+                        </li>
+                        <li class="text-gray-400 flex items-center gap-2">
+                            <i class="ph-fill ph-clock text-brand-gold"></i> Disp. aos finais de semana
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-white/10 pt-8 text-center md:flex md:justify-between md:text-left">
+                <p class="text-gray-500 text-sm">
+                    &copy; <span id="year"></span> GB Transporte Express. Todos os direitos reservados.
+                </p>
+                <p class="text-gray-500 text-sm mt-2 md:mt-0">
+                    Logística Inteligente
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Lógica do Formulário (Integração WhatsApp) -->
+    <script>
+        // Atualiza o ano no rodapé
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        // Envio para o WhatsApp
+        function sendToWhatsApp(e) {
+            e.preventDefault();
+            
+            const nome = document.getElementById('nome').value;
+            const origem = document.getElementById('origem').value;
+            const destino = document.getElementById('destino').value;
+            const tipo = document.getElementById('tipo').value;
+            const peso = document.getElementById('peso').value || 'Não informado';
+            const detalhes = document.getElementById('detalhes').value || 'Nenhum detalhe extra.';
+            
+            // Monta a mensagem que chegará no celular do Gabriel
+            let mensagem = `*NOVA COTAÇÃO PELO SITE* 🚚\n\n`;
+            mensagem += `*Empresa/Nome:* ${nome}\n`;
+            mensagem += `*Origem:* ${origem}\n`;
+            mensagem += `*Destino:* ${destino}\n`;
+            mensagem += `*Tipo de Carga:* ${tipo}\n`;
+            mensagem += `*Peso/Volume:* ${peso}\n`;
+            mensagem += `*Detalhes:* ${detalhes}\n\n`;
+            mensagem += `Aguardo retorno!`;
+
+            // Codifica a mensagem para a URL
+            const textoCodificado = encodeURIComponent(mensagem);
+            
+            // Número do Gabriel
+            const numeroTelefone = "5519998232707";
+            
+            // Redireciona para o WhatsApp
+            window.open(`https://wa.me/${numeroTelefone}?text=${textoCodificado}`, '_blank');
+        }
+    </script>
+</body>
 </html>
