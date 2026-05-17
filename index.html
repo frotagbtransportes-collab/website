@@ -3,8 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GB Transporte Express | Logística Segura e Pontual</title>
-    <meta name="description" content="Transporte logístico ágil para empresas, e-commerces e indústrias em Paulínia, Campinas e região. Frota com Fiorino e Caminhão 3/4.">
+    
+    <!-- Título com Emoji na Aba -->
+    <title>🚚 GB Transporte Express | Logística Segura e Pontual</title>
+    
+    <!-- Ícone da Aba (Favicon) usando Emoji -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🚚</text></svg>">
+    
+    <!-- SEO: Otimização para o Google encontrar o site -->
+    <meta name="description" content="A GB Transporte Express é a sua transportadora parceira. Logística ágil para empresas, e-commerces e indústrias em Paulínia, Campinas e região. Frota com Fiorino e Caminhão 3/4.">
+    <meta name="keywords" content="Transportadora, GB Transporte Express, Frete Campinas, Frete Paulínia, Frete Expresso, Logística, Fiorino, Caminhão Baú 3/4, Carga Paletizada, Transporte PJ, Transportadora de Bebidas, Transportadora de Frutas">
+    <meta name="author" content="GB Transporte Express">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph (Para ficar bonito ao compartilhar no WhatsApp/Facebook) -->
+    <meta property="og:title" content="GB Transporte Express | Logística Ágil">
+    <meta property="og:description" content="Transporte seguro, preço justo e pontualidade. Peça um orçamento rápido pelo WhatsApp!">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="pt_BR">
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -120,7 +136,7 @@
                 <div class="hidden md:flex space-x-8 items-center">
                     <a href="#diferenciais" class="text-sm font-medium text-gray-300 hover:text-brand-gold transition-colors">Diferenciais</a>
                     <a href="#frota" class="text-sm font-medium text-gray-300 hover:text-brand-gold transition-colors">Nossa Frota</a>
-                    <!-- Correção: Botão agora vai direto pro WhatsApp ao invés de descer a página -->
+                    <!-- Botão WhatsApp direto -->
                     <a href="https://wa.me/5519998232707?text=Ol%C3%A1!%20Gostaria%20de%20solicitar%20um%20or%C3%A7amento%20r%C3%A1pido." target="_blank" class="group relative inline-flex items-center justify-center gap-2 px-6 py-2.5 text-sm font-bold text-black bg-brand-gold rounded-full overflow-hidden transition-all hover:scale-105 hover:shadow-[0_0_20px_rgba(212,175,55,0.4)]">
                         <span class="absolute inset-0 w-full h-full -mt-1 rounded-lg opacity-30 bg-gradient-to-b from-transparent via-transparent to-black"></span>
                         <i class="ph ph-whatsapp-logo text-lg relative z-10"></i>
@@ -128,7 +144,7 @@
                     </a>
                 </div>
 
-                <!-- Mobile Action Button (Correção pré-deploy para celulares) -->
+                <!-- Mobile Action Button -->
                 <div class="md:hidden flex items-center">
                     <a href="https://wa.me/5519998232707?text=Ol%C3%A1!%20Gostaria%20de%20solicitar%20um%20or%C3%A7amento%20r%C3%A1pido." target="_blank" class="flex items-center justify-center p-2.5 bg-brand-gold text-black rounded-full shadow-[0_0_15px_rgba(212,175,55,0.3)] hover:scale-105 transition-transform" aria-label="Falar no WhatsApp">
                         <i class="ph-bold ph-whatsapp-logo text-2xl"></i>
@@ -140,11 +156,9 @@
 
     <!-- Hero Section -->
     <section class="relative pt-32 pb-20 lg:pt-56 lg:pb-40 overflow-hidden bg-brand-black" id="hero-section">
-        <!-- Background Pattern animado via parallax -->
         <div class="absolute inset-0 bg-pattern parallax-bg opacity-40 z-0"></div>
         <div class="absolute inset-0 bg-gradient-to-b from-brand-black/40 via-brand-black/80 to-brand-black z-0"></div>
         
-        <!-- Elemento de brilho que segue o mouse -->
         <div id="mouse-glow" class="hidden lg:block"></div>
 
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -237,11 +251,12 @@
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <!-- Fiorino -->
                 <div class="reveal-scale bg-brand-black rounded-3xl overflow-hidden border border-white/5 flex flex-col items-center group shadow-2xl hover:border-brand-gold/20 transition-all duration-500">
-                    <div class="w-full h-48 bg-gradient-to-b from-white/5 to-transparent flex items-center justify-center relative overflow-hidden">
-                        <div class="absolute inset-0 bg-brand-gold/5 scale-150 group-hover:scale-100 transition-transform duration-700 rounded-full blur-3xl"></div>
-                        <i class="ph-thin ph-car-profile text-7xl text-white/20 group-hover:text-brand-gold/40 transition-colors duration-500 relative z-10 transform group-hover:translate-x-4"></i>
+                    <!-- FOTO REAL DA FIORINO COM FALLBACK PREVENTIVO -->
+                    <div class="w-full h-56 relative overflow-hidden">
+                        <div class="absolute inset-0 bg-brand-gold/5 scale-150 group-hover:scale-100 transition-transform duration-700 rounded-full blur-3xl z-0"></div>
+                        <img src="fiorino.jpeg" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1580674285054-bed31e145f59?q=80&w=2070&auto=format&fit=crop';" alt="Utilitário Fiorino da GB Transporte Express" class="w-full h-full object-cover relative z-10 group-hover:scale-110 transition-transform duration-500">
                     </div>
-                    <div class="p-10 w-full -mt-8 bg-brand-black rounded-t-[40px] relative z-20 border-t border-white/5">
+                    <div class="p-10 w-full bg-brand-black rounded-t-[40px] relative z-20 border-t border-white/5">
                         <div class="flex items-center gap-4 mb-6">
                             <div class="p-3 bg-brand-gold/10 rounded-xl">
                                 <i class="ph-fill ph-lightning text-2xl text-brand-gold"></i>
@@ -259,11 +274,12 @@
 
                 <!-- Caminhão 3/4 -->
                 <div class="reveal-scale bg-brand-black rounded-3xl overflow-hidden border border-white/5 flex flex-col items-center group shadow-2xl hover:border-brand-gold/20 transition-all duration-500" style="transition-delay: 100ms;">
-                    <div class="w-full h-48 bg-gradient-to-b from-white/5 to-transparent flex items-center justify-center relative overflow-hidden">
-                        <div class="absolute inset-0 bg-brand-gold/5 scale-150 group-hover:scale-100 transition-transform duration-700 rounded-full blur-3xl"></div>
-                        <i class="ph-thin ph-truck text-7xl text-white/20 group-hover:text-brand-gold/40 transition-colors duration-500 relative z-10 transform group-hover:translate-x-4"></i>
+                    <!-- FOTO REAL DO CAMINHÃO 3/4 COM FALLBACK PREVENTIVO -->
+                    <div class="w-full h-56 relative overflow-hidden">
+                        <div class="absolute inset-0 bg-brand-gold/5 scale-150 group-hover:scale-100 transition-transform duration-700 rounded-full blur-3xl z-0"></div>
+                        <img src="caminhao.jpeg" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?q=80&w=2070&auto=format&fit=crop';" alt="Caminhão Baú 3/4 da GB Transporte Express" class="w-full h-full object-cover relative z-10 group-hover:scale-110 transition-transform duration-500">
                     </div>
-                    <div class="p-10 w-full -mt-8 bg-brand-black rounded-t-[40px] relative z-20 border-t border-white/5">
+                    <div class="p-10 w-full bg-brand-black rounded-t-[40px] relative z-20 border-t border-white/5">
                         <div class="flex items-center gap-4 mb-6">
                             <div class="p-3 bg-brand-gold/10 rounded-xl">
                                 <i class="ph-fill ph-package text-2xl text-brand-gold"></i>
@@ -284,7 +300,6 @@
 
     <!-- Formulário de Orçamento Rápido -->
     <section id="contato" class="py-24 bg-brand-black relative">
-        <!-- Divisor decorativo Glow -->
         <div class="absolute top-0 left-1/2 -translate-x-1/2 w-2/3 h-[1px] bg-gradient-to-r from-transparent via-brand-gold to-transparent opacity-50"></div>
         <div class="absolute top-0 left-1/2 -translate-x-1/2 w-1/3 h-[100px] bg-brand-gold blur-[100px] opacity-10 pointer-events-none"></div>
         
@@ -416,12 +431,10 @@
         </div>
     </footer>
 
-    <!-- Lógica e Animações (Nível Apple) -->
+    <!-- Lógica e Animações -->
     <script>
-        // 1. Atualiza Ano
         document.getElementById('year').textContent = new Date().getFullYear();
 
-        // 2. Integração WhatsApp
         function sendToWhatsApp(e) {
             e.preventDefault();
             
@@ -447,13 +460,9 @@
             window.open(`https://wa.me/${numeroTelefone}?text=${textoCodificado}`, '_blank');
         }
 
-        // 3. Inicialização GSAP & Efeitos Avançados
         document.addEventListener("DOMContentLoaded", (event) => {
-            
-            // Registra o plugin de Scroll
             gsap.registerPlugin(ScrollTrigger);
 
-            // Animação inicial do Hero (Fade e Slide Up)
             gsap.to(".hero-elem", {
                 y: 0,
                 opacity: 1,
@@ -464,66 +473,36 @@
                 delay: 0.2
             });
 
-            // Animações de Scroll (Elementos surgindo)
             gsap.utils.toArray('.reveal-up').forEach(elem => {
                 gsap.fromTo(elem, 
                     { y: 60, opacity: 0, visibility: "hidden" },
                     {
-                        scrollTrigger: {
-                            trigger: elem,
-                            start: "top 85%", // Dispara quando o topo do elemento atinge 85% da tela
-                        },
-                        y: 0,
-                        opacity: 1,
-                        visibility: "visible",
-                        duration: 1,
-                        ease: "power3.out"
+                        scrollTrigger: { trigger: elem, start: "top 85%" },
+                        y: 0, opacity: 1, visibility: "visible", duration: 1, ease: "power3.out"
                     }
                 );
             });
 
-            // Animação de Scroll (Scale in para os veículos)
             gsap.utils.toArray('.reveal-scale').forEach(elem => {
                 gsap.fromTo(elem, 
                     { scale: 0.95, opacity: 0, visibility: "hidden" },
                     {
-                        scrollTrigger: {
-                            trigger: elem,
-                            start: "top 85%",
-                        },
-                        scale: 1,
-                        opacity: 1,
-                        visibility: "visible",
-                        duration: 1.2,
-                        ease: "expo.out"
+                        scrollTrigger: { trigger: elem, start: "top 85%" },
+                        scale: 1, opacity: 1, visibility: "visible", duration: 1.2, ease: "expo.out"
                     }
                 );
             });
 
-            // Efeito Parallax no Background Pattern
             gsap.to(".parallax-bg", {
-                yPercent: 30,
-                ease: "none",
-                scrollTrigger: {
-                    trigger: "#hero-section",
-                    start: "top top",
-                    end: "bottom top",
-                    scrub: true
-                }
+                yPercent: 30, ease: "none",
+                scrollTrigger: { trigger: "#hero-section", start: "top top", end: "bottom top", scrub: true }
             });
 
             gsap.to(".parallax-bg-2", {
-                yPercent: 20,
-                ease: "none",
-                scrollTrigger: {
-                    trigger: "#frota",
-                    start: "top bottom",
-                    end: "bottom top",
-                    scrub: true
-                }
+                yPercent: 20, ease: "none",
+                scrollTrigger: { trigger: "#frota", start: "top bottom", end: "bottom top", scrub: true }
             });
 
-            // 4. Efeito do Mouse Glow no Hero Section
             const glow = document.getElementById('mouse-glow');
             const heroSection = document.getElementById('hero-section');
 
@@ -532,23 +511,10 @@
                     const rect = heroSection.getBoundingClientRect();
                     const x = e.clientX - rect.left;
                     const y = e.clientY - rect.top;
-                    
-                    // Usa GSAP para mover o brilho suavemente (sem delay visual grosseiro)
-                    gsap.to(glow, {
-                        x: x,
-                        y: y,
-                        duration: 0.6,
-                        ease: "power2.out"
-                    });
+                    gsap.to(glow, { x: x, y: y, duration: 0.6, ease: "power2.out" });
                 });
-
-                heroSection.addEventListener('mouseenter', () => {
-                    gsap.to(glow, { opacity: 1, duration: 0.3 });
-                });
-
-                heroSection.addEventListener('mouseleave', () => {
-                    gsap.to(glow, { opacity: 0, duration: 0.5 });
-                });
+                heroSection.addEventListener('mouseenter', () => gsap.to(glow, { opacity: 1, duration: 0.3 }));
+                heroSection.addEventListener('mouseleave', () => gsap.to(glow, { opacity: 0, duration: 0.5 }));
             }
         });
     </script>
